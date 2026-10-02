@@ -97,34 +97,65 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
- document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('errorMsg');
+// ==========================================
+// LOGIN ADMIN
+// ==========================================
+document.addEventListener("DOMContentLoaded", function() {
 
-            try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
+    const loginForm = document.getElementById("loginForm");
 
-                const result = await response.json();
+    // Kalau bukan halaman login, hentikan bagian ini
+    if (!loginForm) return;
 
-                if (response.ok) {
-                    // Jika login sukses, simpan status admin ke localStorage browser
-                    localStorage.setItem("isAdmin", "true");
-                    alert("Login Berhasil!");
-                    window.location.href = "index.html"; // Kembali ke halaman utama
-                } else {
-                    errorMsg.textContent = result.pesan || "Login gagal!";
-                }
-            } catch (err) {
-                console.error(err);
-                errorMsg.textContent = "Terjadi kesalahan pada server.";
+    loginForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const errorMsg = document.getElementById("errorMsg");
+
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+
+                // Simpan status admin
+                localStorage.setItem("isAdmin", "true");
+
+                alert("Login Berhasil!");
+
+                // Kembali ke halaman utama
+                window.location.href = "index.html";
+
+            } else {
+
+                errorMsg.textContent =
+                    result.pesan || "Login gagal!";
+
             }
-        });
+
+        } catch (err) {
+
+            console.error(err);
+
+            errorMsg.textContent =
+                "Terjadi kesalahan pada server.";
+
+        }
+    });
+
+});
 
 // ==========================================
 // 4. KONTROL ADMIN (MENU HAMBURGER MELAYANG)
