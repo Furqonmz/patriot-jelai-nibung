@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Desa - Kawasan Transmigrasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- LEAFLET CSS (Untuk Peta) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="tep2026.html">TEP 2026</a>
+            <a href="profil-desa.html" class="active" style="color: var(--secondary-blue);">PROFIL DESA</a>
+            <a href="umkm.html">UMKM</a>
+            <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+        </div>
+
+        <div class="hamburger">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <section class="hero-profil">
+
+        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
+        <div class="breadcrumb-box">
+            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
+                <i class="fa-solid fa-house"></i>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="" class="breadcrumb-item">Profil Desa</a>
+        </div>
+
+        <h1>PROFIL DESA</h1>
+        <p>Mengenal 5 Desa di Kawasan Transmigrasi Pulau Nibung. Kenali karakteristik, potensi, dan kehidupan masyarakat di setiap desa.</p>
+        <a href="#peta" class="btn">Pelajari Selengkapnya</a>
+    </section>
+
+    <section id="peta" class="bg-light">
+        <h2 class="section-title">PETA DESA KAWASAN TRANSMIGRASI</h2>
+        <div class="map-container">
+            <!-- Div untuk merender peta Leaflet -->
+            <div id="map"></div>
+            <div class="daftar-desa">
+                <h3>Daftar Desa</h3>
+                <ul>
+                    <li><i class="fa-solid fa-location-dot"></i> Pulau Nibung</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Sungai Baru</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Sungai Bundung</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Sungai Raja</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Sungai Damar</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="village-grid">
+            
+            <!-- Desa 1 -->
+            <a href="detail-desa.html" class="village-card">
+                <img src="img/desa1.jpg" alt="Pulau Nibung">
+                <div class="overlay">
+                    <h4>PULAU NIBUNG</h4>
+                </div>
+            </a>
+
+            <!-- Desa 2 -->
+            <a href="detail-desa.html" class="village-card">
+                <img src="img/desa2.jpg" alt="Sungai Baru">
+                <div class="overlay">
+                    <h4>SUNGAI BARU</h4>
+                </div>
+            </a>
+
+            <!-- Desa 3 -->
+            <a href="detail-desa.html" class="village-card">
+                <img src="img/desa3.jpg" alt="Sungai Bundung">
+                <div class="overlay">
+                    <h4>SUNGAI BUNDUNG</h4>
+                </div>
+            </a>
+
+            <!-- Desa 4 -->
+            <a href="detail-desa.html" class="village-card">
+                <img src="img/desa4.jpg" alt="Sungai Raja">
+                <div class="overlay">
+                    <h4>SUNGAI RAJA</h4>
+                </div>
+            </a>
+
+            <!-- Desa 5 -->
+            <a href="detail-desa.html" class="village-card">
+                <img src="img/desa5.jpg" alt="Sungai Damar">
+                <div class="overlay">
+                    <h4>SUNGAI DAMAR</h4>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <footer>
+        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
+        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
+    </footer>
+
+    <!-- LEAFLET JS (SCRIPT UNTUK PETA) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

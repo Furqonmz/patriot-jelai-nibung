@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kawasan Transmigrasi Jelai Nibung</title>
+    <!-- Menggunakan font Poppins agar modern dan rapi -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-seedling"></i> JelaiConnect
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html" class="active" style="color: var(--secondary-blue);">HOME</a>
+            <a href="tep2026.html">TEP 2026</a>
+            <a href="profil-desa.html">PROFIL DESA</a>
+            <a href="umkm.html">UMKM</a>
+            <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+        </div>
+
+        <div class="hamburger">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="eyebrow">
+                <i class="fa-solid fa-location-dot"></i>
+                Kawasan Transmigrasi Jelai Nibung
+            </div>
+
+            <h1>Selamat Datang di JelaiConnect</h1>
+
+            <p>Jelajahi Potensi, Cerita, dan Masyarakat di Desa Kawasan Transmigrasi Pulau Nibung</p>
+
+            <div>
+                <a href="#tentang" class="btn white">Jelajahi Kawasan</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TENTANG KAWASAN -->
+    <section id="tentang">
+        <h2 class="section-title">Tentang Kawasan</h2>
+        <div class="grid-2-col">
+            <div class="image-grid">
+                <!-- Ganti URL gambar dengan gambar asli Anda -->
+                <img src="img/about.jpg" alt="Kegiatan Kawasan">
+            </div>
+            <div class="text-content">
+                <p>Kawasan Transmigrasi Pulau Nibung merupakan kawasan pengembangan transmigrasi yang berada di Kecamatan Jelai, Kabupaten Sukamara, Provinsi Kalimantan Tengah.</p>
+                <p>Kawasan ini tidak hanya mencakup Desa Pulau Nibung, tetapi terdiri atas sembilan desa yang memiliki potensi besar pada sektor pertanian, khususnya komoditas jeruk sebagai penggerak ekonomi masyarakat.</p>
+                <p>Melalui Program Ekspedisi Patriot Tahun 2026, kawasan ini dikembangkan menuju sentra industri jeruk berbasis teknologi pengolahan dan budidaya organik untuk meningkatkan nilai tambah hasil pertanian.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIM EKSPEDISI -->
+    <section id="tep2026" class="bg-light-blue">
+        <h2 class="section-title">Tim Ekspedisi Patriot 2026</h2>
+        <div class="grid-2-col">
+            <div class="text-content">
+                <p>Kementerian Transmigrasi menyelenggarakan Tim Ekspedisi Patriot (TEP) Tahun 2026 sebagai bagian dari implementasi program Transmigrasi Patriot, sebagaimana diatur dalam Peraturan Menteri Transmigrasi Nomor 3 Tahun 2026.</p>
+                <p>Program ini merupakan upaya sistematis dalam pelaksanaan kegiatan riset, kajian, dan pendampingan di kawasan transmigrasi. Tujuannya adalah mendukung perencanaan, pembangunan, dan pengembangan kawasan secara berkelanjutan melalui pelibatan sumber daya manusia unggul.</p>
+                <p>Program ini bermitra dengan 10 kampus terbaik di Indonesia yakni Universitas Padjadjaran, Universitas Airlangga, Universitas Hasanuddin, Institut Teknologi Sepuluh Nopember, Universitas Indonesia, Universitas Brawijaya, Institut Teknologi Bandung, Universitas Diponegoro, Universitas Gadjah Mada, dan IPB University.</p>
+                <a href="tep2026.html" class="btn mt-3">Selengkapnya...</a>
+            </div>
+            <div>
+                <img src="img/timtep.jpeg" alt="Tim Ekspedisi">
+            </div>
+        </div>
+    </section>
+
+    <!-- LINGKUP DESA (SCROLL SAMPING / CAROUSEL) -->
+    <section id="profildesa">
+        <h2 class="section-title">Lingkup Desa Kawasan Transmigrasi</h2>
+        
+        <div class="carousel-wrapper">
+            <!-- Tombol Kiri -->
+            <button class="carousel-btn btn-prev" onclick="scrollCarousel(-1)">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            
+            <!-- Container Scroll Samping (5 Desa) -->
+            <div class="carousel-container" id="desa-carousel">
+                <!-- Desa 1 -->
+                <div class="desa-card">
+                    <img src="img/nibung.jpg" alt="Desa Pulau Nibung">
+                    <h3>Desa Pulau Nibung</h3>
+                    <p>Kecamatan Jelai</p>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+                <!-- Desa 2 -->
+                <div class="desa-card">
+                    <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Desa Sungai Baru">
+                    <h3>Desa Sungai Baru</h3>
+                    <p>Kecamatan Jelai</p>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+                <!-- Desa 3 -->
+                <div class="desa-card">
+                    <img src="https://images.unsplash.com/photo-1498677237075-8461750516fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Desa Sungai Bundung">
+                    <h3>Desa Sungai Bundung</h3>
+                    <p>Kecamatan Jelai</p>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+                <!-- Desa 4 -->
+                <div class="desa-card">
+                    <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Desa Sei Raja">
+                    <h3>Desa Sungai Raja</h3>
+                    <p>Kecamatan Jelai</p>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+                <!-- Desa 5 -->
+                <div class="desa-card">
+                    <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Desa Sukaraja">
+                    <h3>Desa Sungai Damar</h3>
+                    <p>Kecamatan Pantai Lunci</p>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+            </div>
+
+            <!-- Tombol Kanan -->
+            <button class="carousel-btn btn-next" onclick="scrollCarousel(1)">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="center-btn">
+            <a href="profil-desa.html" class="btn">Selengkapnya Semua Desa...</a>
+        </div>
+    </section>
+
+    <!-- UMKM KAWASAN -->
+    <section id="umkm" class="bg-light-blue">
+        <h2 class="section-title">UMKM Kawasan Transmigrasi</h2>
+        <div class="grid-2-col">
+            <div class="text-content">
+                <p>Beragam usaha masyarakat tumbuh dan berkembang di Kawasan Transmigrasi Jelai Nibung yang tersebar di lima desa. Mulai dari produk olahan pangan, hasil pertanian, kerajinan, hingga berbagai usaha lokal lainnya, UMKM menjadi bagian penting dalam menggerakkan perekonomian dan menggali potensi masyarakat setempat.</p>
+                <p>Melalui keberagaman produk dan kreativitas pelaku usaha, UMKM di kawasan ini memiliki potensi untuk terus berkembang, memperluas pasar, serta memperkenalkan produk unggulan Jelai Nibung kepada masyarakat yang lebih luas.</p>
+                <a href="umkm.html" class="btn mt-3">Selengkapnya...</a>
+            </div>
+            <div>
+                <h3 style="color: var(--primary-blue); margin-bottom: 15px;">PRODUK UNGGULAN</h3>
+                <img src="img/umkm.jpg" alt="Produk Unggulan Udang/Ikan">
+            </div>
+        </div>
+    </section>
+
+    <!-- CERITA KAWASAN -->
+    <section id="cerita">
+        <h2 class="section-title">Cerita Kawasan Transmigrasi</h2>
+        <div class="cerita-grid">
+            <!-- Cerita 1 -->
+            <div class="cerita-card">
+                <img src="img/jeruk.jpg" alt="Panen Jeruk">
+                <div class="cerita-card-body">
+                    <h3>Petani Pulau Nibung Panen Jeruk Sebanyak 500Kg</h3>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+            </div>
+            <!-- Cerita 2 -->
+            <div class="cerita-card">
+                <img src="https://images.unsplash.com/photo-1558904541-efa843a96f0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Panen Jeruk">
+                <div class="cerita-card-body">
+                    <h3>Petani Pulau Nibung Panen Jeruk Sebanyak 500Kg</h3>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+            </div>
+            <!-- Cerita 3 -->
+            <div class="cerita-card">
+                <img src="https://images.unsplash.com/photo-1558904541-efa843a96f0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Panen Jeruk">
+                <div class="cerita-card-body">
+                    <h3>Petani Pulau Nibung Panen Jeruk Sebanyak 500Kg</h3>
+                    <a href="#" class="desa-link">Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="center-btn">
+            <a href="cerita-kawasan.html" class="btn">Selengkapnya...</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; Tim Ekspedisi Patriot 2026 | Kementrian Transmigrasi</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="js/script.js"></script>
+</body>
+</html>

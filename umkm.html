@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMKM Kawasan Transmigrasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG</div>
+
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="tep2026.html">TEP 2026</a>
+            <a href="profil-desa.html">PROFIL DESA</a>
+            <a href="umkm.html" class="active" style="color: var(--secondary-blue);">UMKM</a>
+            <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+        </div>
+
+        <div class="hamburger">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <section id="daftar-umkm" class="hero-umkm">
+        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
+        <div class="breadcrumb-box">
+            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
+                <i class="fa-solid fa-house"></i>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="" class="breadcrumb-item">UMKM</a>
+        </div>
+        
+        <h1>Unit Mikro Kecil dan Menengah</h1>
+        <p>Mengenal UMKM di 5 Desa Kawasan Transmigrasi</p>
+
+        <div id="admin-umkm-container" style="display: none; text-align: right; margin-bottom: 25px;">
+            <button id="btnBukaForm" style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px;">
+                <i class="fa-solid fa-plus"></i> Tambah UMKM
+            </button>
+        </div>
+
+        <!-- FORM TAMBAH / EDIT UMKM (2 KOLOM) -->
+        <div id="form-umkm-modal" style="display: none; background: #fff; padding: 25px; margin: 0 auto 25px auto; max-width: 800px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: left;">
+            <h3 id="modal-title" style="margin-bottom: 20px; color: #333;">Form Tambah UMKM Baru</h3>
+            <form id="formTambahUMKM">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Nama UMKM</label>
+                        <input type="text" id="inputNama" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Nama Pemilik</label>
+                        <input type="text" id="inputPemilik" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Asal Desa</label>
+                        <input type="text" id="inputDesa" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Nama Produk</label>
+                        <input type="text" id="inputProduk" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Kisaran Harga</label>
+                        <input type="text" id="inputHarga" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Contoh: Rp 15.000 - Rp 35.000">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">No. WhatsApp / Kontak</label>
+                        <input type="text" id="inputKontak" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Contoh: 081234567890">
+                    </div>
+                    
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Lokasi / Alamat Lengkap</label>
+                        <input type="text" id="inputLokasi" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Pilih Gambar (File)</label>
+                        <input type="file" id="inputGambar" accept="image/*" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Deskripsi UMKM</label>
+                        <textarea id="inputDeskripsi" required style="width: 100%; height: 90px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"></textarea>
+                    </div>
+
+                </div>
+                <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: bold;">Simpan ke Database</button>
+                <button type="button" id="btnBatal" style="background: #6c757d; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; margin-left: 10px;">Batal</button>
+            </form>
+        </div>
+
+        <!-- GRID UMKM -->
+        <div class="umkm-grid">
+            <!-- Data dimuat otomatis dari backend -->
+        </div>
+    </section>
+
+    <footer>
+        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
+        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Cerita - Petani Panen Jeruk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG</div>
+        
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="tep2026.html">TEP 2026</a>
+            <a href="profil-desa.html">Profil Desa</a> 
+            <a href="umkm.html">UMKM</a>
+            <a href="cerita-kawasan.html" class="active" style="color: var(--secondary-blue);">Cerita Kawasan</a>
+        </div>
+
+        <div class="hamburger">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="article-container">
+        
+        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
+        <div class="breadcrumb-box">
+            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
+                <i class="fa-solid fa-house"></i>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="cerita-kawasan.html" class="breadcrumb-item">Cerita Kawasan</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current" id="breadcrumbNama">...</span>
+        </div>
+
+        <!-- JUDUL BERITA -->
+        <h1 class="article-title" id="detailJudul">Memuat Judul...</h1>
+
+        <!-- Gambar -->
+        <div class="image-gallery" id="detailGaleri" style="text-align: center;">
+            <p>Memuat gambar...</p>
+        </div>
+
+        <!-- META DATA (Penulis & Tanggal) -->
+        <div class="article-meta" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+            <span class="author" id="detailPenulis"><i class="fa-solid fa-pen-nib"></i> Penulis : ...</span>
+            <span id="detailTanggal"><i class="fa-regular fa-calendar-days"></i>...</span>
+        </div>
+
+        <!-- ISI BERITA -->
+        <div class="article-content" id="detailKonten">
+            <p>Memuat isi cerita...</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
+        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="js/script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail UMKM - CATR.EST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG</div>
+
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="tep2026.html">TEP 2026</a>
+            <a href="profil-desa.html">PROFIL DESA</a>
+            <a href="umkm.html" class="active" style="color: var(--secondary-blue);">UMKM</a> 
+            <a href="cerita-kawasan.htmL">CERITA KAWASAN</a>
+        </div>
+
+        <div class="hamburger">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <section class="detail-section">
+        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
+        <div class="breadcrumb-box">
+            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
+                <i class="fa-solid fa-house"></i>
+            </a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="umkm.html" class="breadcrumb-item">UMKM</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current" id="breadcrumbNama">...</span>
+        </div>
+
+        <h1 class="umkm-title" id="detailNamaUMKM">Memuat Data...</h1>
+
+        <div class="detail-grid">
+            <!-- Kolom Kiri: Info -->
+            <div>
+                <ul class="info-list">
+                    <li><strong>Pemilik</strong> <span id="detailPemilik">: ...</span></li>
+                    <li><strong>Asal Desa</strong> <span id="detailDesa">: ...</span></li>
+                    <li><strong>Produk</strong> <span id="detailProduk">: ...</span></li>
+                    <li><strong>Harga</strong> <span id="detailHarga">: ...</span></li>
+                    <li><strong>Lokasi</strong> <span id="detailLokasi">: ...</span></li>
+                </ul>
+                <a href="#" target="_blank" class="btn-hubungi" id="detailKontak">
+                    <i class="fa-brands fa-whatsapp"></i> Hubungi Penjual
+                </a>
+            </div>
+
+            <!-- Kolom Kanan: Foto -->
+            <div>
+                <img src="" alt="Foto UMKM" class="umkm-photo" id="detailGambarUMKM" style="display: none; width: 100%; border-radius: 8px;">
+            </div>
+        </div>
+
+        <!-- Kolom Bawah: Deskripsi (Full Width) -->
+        <div class="umkm-desc" id="detailDeskripsiUMKM">
+           Memuat deskripsi UMKM...
+        </div>
+    </section>
+
+    <footer>
+        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
+        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="js/script.js"></script>
+
+</body>
+</html>
