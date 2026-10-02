@@ -44,8 +44,11 @@ const upload = multer({storage: storage});
 // 1. KONEKSI KE MONGODB ATLAS
 // ==========================================
 mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('Berhasil terhubung ke Database MongoDB Atlas!'))
-.catch((err) => console.error('Koneksi database gagal:', err));
+    .then(() => console.log('Berhasil terhubung ke Database MongoDB Atlas!'))
+    .catch((err) => {
+        console.error('Koneksi database gagal:', err.message);
+        console.error(err);
+    });
 
 // ==========================================
 // 2. SKEMA & MODEL 
@@ -132,7 +135,11 @@ app.get('/api/umkm', async (req, res) => {
         const daftarUMKM = await UMKM.find();
         res.json(daftarUMKM);
     } catch (error) {
-        res.status(500).json({ pesan: "Gagal mengambil data dari database", error });
+        console.error('ERROR GET /api/umkm:', error);
+        res.status(500).json({
+            pesan: "Gagal mengambil data dari database",
+            error: error.message
+        });
     }
 });
 
@@ -212,11 +219,14 @@ app.delete('/api/umkm/:id', async(req, res) => {
 // [GET] Ambil Semua Cerita (Digunakan di halaman cerita-kawasan.html)
 app.get('/api/cerita', async (req, res) => {
     try {
-        // Gunakan .find() untuk mengambil SEMUA data dalam bentuk Array
-        const daftarCerita = await Cerita.find().sort({ tanggal: -1 }); 
+        const daftarCerita = await Cerita.find().sort({ tanggal: -1 });
         res.json(daftarCerita);
     } catch (error) {
-        res.status(500).json({ pesan: "Gagal mengambil cerita", error });
+        console.error('ERROR GET /api/cerita:', error);
+        res.status(500).json({
+            pesan: "Gagal mengambil cerita",
+            error: error.message
+        });
     }
 });
 
