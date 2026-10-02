@@ -16,6 +16,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// test di vercel
+app.get('/api/test', (req, res) => {
+    res.json({
+        status: 'success',
+        pesan: 'Express API berhasil berjalan di Vercel!'
+    });
+});
+
 // PENGATURAN UPLOAD GAMBAR DENGAN MULTER
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -266,6 +274,10 @@ app.delete('/api/cerita/:id', async (req, res) => {
 // ==========================================
 // 5. MENYALAKAN SERVER
 // ==========================================
-app.listen(port, () => {
-    console.log(`Backend server menyala! Coba buka http://localhost:${port} di browser Anda.`);
-});
+module.exports = app;
+
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Backend server menyala! Coba buka http://localhost:${port} di browser Anda.`);
+    });
+}
