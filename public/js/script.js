@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function loadUMKM() {
-        fetch('http://localhost:3000/api/umkm')
+        fetch('/api/umkm')
             .then(res => res.json())
             .then(data => {
                 dataUmkmGlobal = data; // Simpan ke variabel global
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.hapusUMKM = async (id) => {
         if (!confirm("Yakin ingin menghapus UMKM ini? Data yang terhapus tidak dapat dikembalikan.")) return;
         try {
-            const res = await fetch(`http://localhost:3000/api/umkm/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/umkm/${id}`, { method: 'DELETE' });
             if (res.ok) {
                 alert("Berhasil dihapus!");
                 loadUMKM(); 
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function() {
             formData.append('gambar', fileInput.files[0]);
         }
 
-        const url = editMode ? `http://localhost:3000/api/umkm/${idEdit}` : 'http://localhost:3000/api/umkm';
+        const url = editMode ? `/api/umkm/${idEdit}` : '/api/umkm';
         const method = editMode ? 'PUT' : 'POST';
 
         try {
@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // B. Load Cerita
     function loadCerita() {
-        fetch('http://localhost:3000/api/cerita')
+        fetch('/api/cerita')
             .then(res => res.json())
             .then(data => {
                 dataCeritaGlobal = data; // Simpan ke variabel global
@@ -377,7 +377,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // C. Hapus Cerita
     window.hapusCerita = async (id) => {
         if (!confirm("Hapus cerita ini secara permanen?")) return;
-        await fetch(`http://localhost:3000/api/cerita/${id}`, { method: 'DELETE' });
+        await fetch(`/api/cerita/${id}`, { method: 'DELETE' });
         loadCerita();
     };
 
@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 formData.append('gambar', fileInputCerita.files[0]);
             }
             
-            const url = editMode ? `http://localhost:3000/api/cerita/${idEdit}` : 'http://localhost:3000/api/cerita';
+            const url = editMode ? `/api/cerita/${idEdit}` : '/api/cerita';
             const method = editMode ? 'PUT' : 'POST';
 
             try {
@@ -456,7 +456,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (idCerita) {
             // Minta data spesifik ke backend menggunakan ID tersebut
-            fetch(`http://localhost:3000/api/cerita/${idCerita}`)
+            fetch(`/api/cerita/${idCerita}`)
                 .then(res => {
                     if (!res.ok) throw new Error("Gagal mengambil data");
                     return res.json();
@@ -517,7 +517,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const idUmkm = urlParams.get('id');
 
         if (idUmkm) {
-            fetch(`http://localhost:3000/api/umkm/${idUmkm}`)
+            fetch(`/api/umkm/${idUmkm}`)
                 .then(res => {
                     if (!res.ok) throw new Error("Gagal mengambil data");
                     return res.json();
