@@ -10,24 +10,33 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    
-    <nav>
-        <div class="logo">
-            <i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG
-        </div>
+<body class="home-page">
 
+    <div class="site-topbar">
+        <p>Program <strong>Tim Ekspedisi Patriot 2026</strong> · Kementerian Transmigrasi RI × Universitas Padjadjaran</p>
+    </div>
+
+    <nav class="site-navbar">
+        <a class="logo" href="index.html" aria-label="Beranda Kawasan Transmigrasi Jelai-Nibung">
+            <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+            <span>
+                <strong>KT JELAI-NIBUNG</strong>
+                <small>Kawasan Transmigrasi · Kecamatan Jelai</small>
+            </span>
+        </a>
         <div class="nav-links">
-            <a href="index.html" class="active" style="color: var(--secondary-blue);">HOME</a>
+            <a href="index.html" class="active">HOME</a>
             <a href="tep2026.html">TEP 2026</a>
             <a href="profil-desa.html">PROFIL DESA</a>
             <a href="umkm.html">UMKM</a>
             <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
         </div>
-
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
+        <button class="hamburger" type="button" aria-label="Buka menu navigasi" aria-expanded="false">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
     </nav>
 
     <!-- HERO SECTION -->
@@ -38,7 +47,7 @@
                 Kawasan Transmigrasi Jelai Nibung
             </div>
 
-            <h1>Selamat Datang di Website Kawasan Transmigrasi Jelai Nibung</h1>
+            <h1>Selamat Datang di Kawasan Transmigrasi Jelai-Nibung</h1>
 
             <p>Jelajahi Potensi, Cerita, dan Masyarakat di Desa Kawasan Transmigrasi Pulau Nibung</p>
 
@@ -50,7 +59,7 @@
 
     <!-- TENTANG KAWASAN -->
     <section id="tentang">
-        <h2 class="section-title">Tentang Kawasan</h2>
+        <h2 class="section-title">TENTANG KAWASAN</h2>
         <div class="grid-2-col">
             <div class="image-grid">
                 <!-- Ganti URL gambar dengan gambar asli Anda -->
@@ -66,7 +75,7 @@
 
     <!-- TIM EKSPEDISI -->
     <section id="tep2026" class="bg-light-blue">
-        <h2 class="section-title">Tim Ekspedisi Patriot 2026</h2>
+        <h2 class="section-title">TIM EKSPEDISI PATRIOT 2026</h2>
         <div class="grid-2-col">
             <div class="text-content">
                 <p>Kementerian Transmigrasi menyelenggarakan Tim Ekspedisi Patriot (TEP) Tahun 2026 sebagai bagian dari implementasi program Transmigrasi Patriot, sebagaimana diatur dalam Peraturan Menteri Transmigrasi Nomor 3 Tahun 2026.</p>
@@ -191,9 +200,46 @@
     </section>
 
     <!-- FOOTER -->
-    <footer>
-        <p>&copy; Tim Ekspedisi Patriot 2026 | Kementrian Transmigrasi</p>
+    <footer class="site-footer">
+        <div class="footer-main">
+            <div class="footer-about">
+                <a class="footer-brand" href="index.html">
+                    <span class="footer-brand-icon"><i class="fa-solid fa-seedling" aria-hidden="true"></i></span>
+                    <span>KT JELAI-NIBUNG</span>
+                </a>
+                <p>
+                    Pusat informasi Kawasan Transmigrasi Jelai-Nibung yang menyajikan
+                    profil desa, potensi lokal, UMKM, dan cerita masyarakat.
+                </p>
+            </div>
+            <div class="footer-navigation">
+                <h3>Navigasi</h3>
+                <a href="index.html">Beranda</a>
+                <a href="tep2026.html">TEP 2026</a>
+                <a href="profil-desa.html">Profil Desa</a>
+                <a href="umkm.html">UMKM</a>
+                <a href="cerita-kawasan.html">Cerita Kawasan</a>
+                <div class="hamburger">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+            <div class="footer-location">
+                <h3>Lokasi Kawasan</h3>
+                <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>Kecamatan Jelai, Kabupaten Sukamara, Kalimantan Tengah, Indonesia.</span>
+                </p>
+                <p><i class="fa-solid fa-seedling" aria-hidden="true"></i>
+                    <span>Mengenal potensi dan kehidupan masyarakat di Kawasan Transmigrasi Jelai-Nibung.</span>
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Kawasan Transmigrasi Jelai-Nibung · Tim Ekspedisi Patriot</p>
+            <a href="index.html">Kembali ke atas <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
+        </div>
     </footer>
+
+
 
     <!-- JAVASCRIPT -->
     <script src="js/script.js"></script>

@@ -1,124 +1,197 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Desa - Kawasan Transmigrasi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Profil Desa | Kawasan Transmigrasi Jelai-Nibung</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- LEAFLET CSS (Untuk Peta) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
 
-    <!-- NAVBAR -->
-    <nav>
-        <div class="logo">
-            <i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG
-        </div>
+<body class="profil-desa-page">
+
+    <div class="site-topbar">
+        <p>
+            Program <strong>Tim Ekspedisi Patriot 2026</strong>
+            · Kementerian Transmigrasi RI × Universitas Padjadjaran
+        </p>
+    </div>
+
+    <nav class="site-navbar">
+        <a class="logo" href="index.html"
+           aria-label="Beranda Kawasan Transmigrasi Jelai-Nibung">
+            <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+            <span>
+                <strong>KT JELAI-NIBUNG</strong>
+                <small>Kawasan Transmigrasi · Kecamatan Jelai</small>
+            </span>
+        </a>
 
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="tep2026.html">TEP 2026</a>
-            <a href="profil-desa.html" class="active" style="color: var(--secondary-blue);">PROFIL DESA</a>
+            <a href="profil-desa.html" class="active">PROFIL DESA</a>
             <a href="umkm.html">UMKM</a>
             <a href="cerita-kawasan.html">CERITA KAWASAN</a>
-        </div>
-
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-    </nav>
-
-    <section class="hero-profil">
-
-        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
-        <div class="breadcrumb-box">
-            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
-                <i class="fa-solid fa-house"></i>
-            </a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="" class="breadcrumb-item">Profil Desa</a>
-        </div>
-
-        <h1>PROFIL DESA</h1>
-        <p>Mengenal 5 Desa di Kawasan Transmigrasi Pulau Nibung. Kenali karakteristik, potensi, dan kehidupan masyarakat di setiap desa.</p>
-        <a href="#peta" class="btn">Pelajari Selengkapnya</a>
-    </section>
-
-    <section id="peta" class="bg-light">
-        <h2 class="section-title">PETA DESA KAWASAN TRANSMIGRASI</h2>
-        <div class="map-container">
-            <!-- Div untuk merender peta Leaflet -->
-            <div id="map"></div>
-            <div class="daftar-desa">
-                <h3>Daftar Desa</h3>
-                <ul>
-                    <li><i class="fa-solid fa-location-dot"></i> Pulau Nibung</li>
-                    <li><i class="fa-solid fa-location-dot"></i> Sungai Baru</li>
-                    <li><i class="fa-solid fa-location-dot"></i> Sungai Bundung</li>
-                    <li><i class="fa-solid fa-location-dot"></i> Sungai Raja</li>
-                    <li><i class="fa-solid fa-location-dot"></i> Sungai Damar</li>
-                </ul>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
-    </section>
 
-    <section>
-        <div class="village-grid">
+        <button class="hamburger" type="button"
+                aria-label="Buka menu navigasi"
+                aria-expanded="false">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
+    </nav>
+
+    <main>
+        <!-- HERO PROFIL DESA -->
+        <section class="hero-profil">
             
-            <!-- Desa 1 -->
-            <a href="detail-desa.html" class="village-card">
-                <img src="img/desa1.jpg" alt="Pulau Nibung">
-                <div class="overlay">
-                    <h4>PULAU NIBUNG</h4>
-                </div>
-            </a>
+            <div class="breadcrumb-box">
+                <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Profil Desa</span>
+            </div>
 
-            <!-- Desa 2 -->
-            <a href="detail-desa.html" class="village-card">
-                <img src="img/desa2.jpg" alt="Sungai Baru">
-                <div class="overlay">
-                    <h4>SUNGAI BARU</h4>
-                </div>
-            </a>
+            <div class="hero-profil-content">
+                <span class="tep-section-label">KAWASAN TRANSMIGRASI JELAI-NIBUNG</span>
+                <h1>Profil Desa</h1>
+                <p>
+                    Mengenal lima desa di Kawasan Transmigrasi Pulau Nibung,
+                    mulai dari karakteristik wilayah, potensi lokal,
+                    hingga kehidupan masyarakatnya.
+                </p>
+                <a href="#peta" class="tep-primary-btn">
+                    Jelajahi Desa <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
 
-            <!-- Desa 3 -->
-            <a href="detail-desa.html" class="village-card">
-                <img src="img/desa3.jpg" alt="Sungai Bundung">
-                <div class="overlay">
-                    <h4>SUNGAI BUNDUNG</h4>
-                </div>
-            </a>
+        <!-- PETA DESA -->
+        <section id="peta" class="profil-peta-section">
+            <div class="profil-section-heading">
+                <span class="tep-section-label">JELAJAHI KAWASAN</span>
+                <h2 class="section-title">Peta Desa Kawasan Transmigrasi</h2>
+                <p>Kenali lokasi dan sebaran lima desa di Kawasan Transmigrasi Jelai-Nibung.</p>
+            </div>
 
-            <!-- Desa 4 -->
-            <a href="detail-desa.html" class="village-card">
-                <img src="img/desa4.jpg" alt="Sungai Raja">
-                <div class="overlay">
-                    <h4>SUNGAI RAJA</h4>
-                </div>
-            </a>
+            <div class="map-container">
+                <div id="map" aria-label="Peta lokasi desa"></div>
 
-            <!-- Desa 5 -->
-            <a href="detail-desa.html" class="village-card">
-                <img src="img/desa5.jpg" alt="Sungai Damar">
-                <div class="overlay">
-                    <h4>SUNGAI DAMAR</h4>
+                <div class="daftar-desa">
+                    <h3>Daftar Desa</h3>
+                    <ul>
+                        <li><i class="fa-solid fa-location-dot"></i> Pulau Nibung</li>
+                        <li><i class="fa-solid fa-location-dot"></i> Sungai Baru</li>
+                        <li><i class="fa-solid fa-location-dot"></i> Sungai Bundung</li>
+                        <li><i class="fa-solid fa-location-dot"></i> Sungai Raja</li>
+                        <li><i class="fa-solid fa-location-dot"></i> Sungai Damar</li>
+                    </ul>
                 </div>
-            </a>
+            </div>
+        </section>
 
+        <!-- KARTU DESA -->
+        <section class="profil-village-section">
+            <div class="profil-section-heading">
+                <span class="tep-section-label">PROFIL WILAYAH</span>
+                <h2 class="section-title">Mengenal Desa</h2>
+                <p>Jelajahi informasi wilayah dan potensi lokal dari setiap desa.</p>
+            </div>
+
+            <div class="village-grid">
+                <a href="detail-desa.html" class="village-card">
+                    <img src="img/desa1.jpg" alt="Desa Pulau Nibung">
+                    <div class="overlay">
+                        <h4>PULAU NIBUNG</h4>
+                        <span>Lihat profil desa <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <a href="detail-desa.html" class="village-card">
+                    <img src="img/desa2.jpg" alt="Desa Sungai Baru">
+                    <div class="overlay">
+                        <h4>SUNGAI BARU</h4>
+                        <span>Lihat profil desa <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <a href="detail-desa.html" class="village-card">
+                    <img src="img/desa3.jpg" alt="Desa Sungai Bundung">
+                    <div class="overlay">
+                        <h4>SUNGAI BUNDUNG</h4>
+                        <span>Lihat profil desa <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <a href="detail-desa.html" class="village-card">
+                    <img src="img/desa4.jpg" alt="Desa Sungai Raja">
+                    <div class="overlay">
+                        <h4>SUNGAI RAJA</h4>
+                        <span>Lihat profil desa <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <a href="detail-desa.html" class="village-card">
+                    <img src="img/desa5.jpg" alt="Desa Sungai Damar">
+                    <div class="overlay">
+                        <h4>SUNGAI DAMAR</h4>
+                        <span>Lihat profil desa <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-main">
+            <div class="footer-about">
+                <a class="footer-brand" href="index.html">
+                    <span class="footer-brand-icon"><i class="fa-solid fa-seedling" aria-hidden="true"></i></span>
+                    <span>KT JELAI-NIBUNG</span>
+                </a>
+                <p>
+                    Pusat informasi Kawasan Transmigrasi Jelai-Nibung yang menyajikan
+                    profil desa, potensi lokal, UMKM, dan cerita masyarakat.
+                </p>
+            </div>
+            <div class="footer-navigation">
+                <h3>Navigasi</h3>
+                <a href="index.html">Beranda</a>
+                <a href="tep2026.html">TEP 2026</a>
+                <a href="profil-desa.html">Profil Desa</a>
+                <a href="umkm.html">UMKM</a>
+                <a href="cerita-kawasan.html">Cerita Kawasan</a>
+            </div>
+            <div class="footer-location">
+                <h3>Lokasi Kawasan</h3>
+                <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>Kecamatan Jelai, Kabupaten Sukamara, Kalimantan Tengah, Indonesia.</span>
+                </p>
+                <p><i class="fa-solid fa-seedling" aria-hidden="true"></i>
+                    <span>Mengenal potensi dan kehidupan masyarakat di Kawasan Transmigrasi Jelai-Nibung.</span>
+                </p>
+            </div>
         </div>
-    </section>
-
-    <footer>
-        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
-        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Kawasan Transmigrasi Jelai-Nibung · Tim Ekspedisi Patriot</p>
+            <a href="index.html">Kembali ke atas <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
+        </div>
     </footer>
 
-    <!-- LEAFLET JS (SCRIPT UNTUK PETA) -->
+    <!-- JAVASCRIPT -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="js/script.js?v=2"></script>
+    <script src="js/script.js"></script>
+
 </body>
 </html>

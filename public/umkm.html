@@ -8,109 +8,174 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="umkm-page">
+    <div class="site-topbar">
+        <p>Program <strong>Tim Ekspedisi Patriot 2026</strong> · Kementerian Transmigrasi RI × Universitas Padjadjaran</p>
+    </div>
 
-    <nav>
-        <div class="logo"><i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG</div>
-
+    <nav class="site-navbar">
+        <a class="logo" href="index.html" aria-label="Beranda Kawasan Transmigrasi Jelai-Nibung">
+            <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+            <span>
+                <strong>KT JELAI-NIBUNG</strong>
+                <small>Kawasan Transmigrasi · Kecamatan Jelai</small>
+            </span>
+        </a>
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="tep2026.html">TEP 2026</a>
             <a href="profil-desa.html">PROFIL DESA</a>
-            <a href="umkm.html" class="active" style="color: var(--secondary-blue);">UMKM</a>
+            <a href="umkm.html" class="active">UMKM</a>
             <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
         </div>
-
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
+        <button class="hamburger" type="button" aria-label="Buka menu navigasi" aria-expanded="false">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
     </nav>
 
-    <section id="daftar-umkm" class="hero-umkm">
-        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
-        <div class="breadcrumb-box">
-            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
-                <i class="fa-solid fa-house"></i>
-            </a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="" class="breadcrumb-item">UMKM</a>
+    <main>
+        <section id="daftar-umkm" class="hero-umkm">
+            <div class="breadcrumb-box">
+                <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">UMKM</span>
+            </div>
+
+            <div class="umkm-hero-content">
+                <span class="tep-section-label">POTENSI EKONOMI LOKAL</span>
+                <h1>UMKM Kawasan Transmigrasi</h1>
+                <p>
+                    Mengenal produk, usaha, dan pelaku UMKM dari desa-desa
+                    di Kawasan Transmigrasi Jelai-Nibung. Dukung produk lokal
+                    dan potensi ekonomi masyarakat.
+                </p>
+            </div>
+
+            <!-- KONTROL ADMIN: ID TETAP -->
+            <div id="admin-umkm-container" style="display: none; text-align: right; margin: 0 auto 25px; max-width: 1100px;">
+                <button id="btnBukaForm" type="button"
+                    style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px;">
+                    <i class="fa-solid fa-plus"></i> Tambah UMKM
+                </button>
+            </div>
+
+            <!-- FORM UMKM: FIELD DAN ID DIPERTAHANKAN -->
+            <div id="form-umkm-modal" style="display: none; background: #fff; padding: 25px; margin: 0 auto 30px; max-width: 800px; border-radius: 12px; box-shadow: 0 8px 30px rgba(14,49,83,0.12); text-align: left;">
+                <h3 id="modal-title" style="margin-bottom: 20px; color: #203247;">Form Tambah UMKM Baru</h3>
+
+                <form id="formTambahUMKM">
+                    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin-bottom: 15px;">
+
+                        <div>
+                            <label for="inputNama" style="display: block; margin-bottom: 5px; font-weight: 500;">Nama UMKM</label>
+                            <input type="text" id="inputNama" required style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div>
+                            <label for="inputPemilik" style="display: block; margin-bottom: 5px; font-weight: 500;">Nama Pemilik</label>
+                            <input type="text" id="inputPemilik" required style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div>
+                            <label for="inputDesa" style="display: block; margin-bottom: 5px; font-weight: 500;">Asal Desa</label>
+                            <input type="text" id="inputDesa" required style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div>
+                            <label for="inputProduk" style="display: block; margin-bottom: 5px; font-weight: 500;">Nama Produk</label>
+                            <input type="text" id="inputProduk" required style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div>
+                            <label for="inputHarga" style="display: block; margin-bottom: 5px; font-weight: 500;">Kisaran Harga</label>
+                            <input type="text" id="inputHarga" required placeholder="Contoh: Rp 15.000 - Rp 35.000" style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div>
+                            <label for="inputKontak" style="display: block; margin-bottom: 5px; font-weight: 500;">No. WhatsApp / Kontak</label>
+                            <input type="text" id="inputKontak" required placeholder="Contoh: 081234567890" style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div style="grid-column: 1 / -1;">
+                            <label for="inputLokasi" style="display: block; margin-bottom: 5px; font-weight: 500;">Lokasi / Alamat Lengkap</label>
+                            <input type="text" id="inputLokasi" required style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div style="grid-column: 1 / -1;">
+                            <label for="inputGambar" style="display: block; margin-bottom: 5px; font-weight: 500;">Pilih Gambar (File)</label>
+                            <input type="file" id="inputGambar" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;">
+                        </div>
+
+                        <div style="grid-column: 1 / -1;">
+                            <label for="inputDeskripsi" style="display: block; margin-bottom: 5px; font-weight: 500;">Deskripsi UMKM</label>
+                            <textarea id="inputDeskripsi" required style="width: 100%; min-height: 90px; padding: 10px; border: 1px solid #d7e0ea; border-radius: 6px; box-sizing: border-box;"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                        Simpan ke Database
+                    </button>
+                    <button type="button" id="btnBatal" style="background: #6c757d; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-left: 8px;">
+                        Batal
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- DAFTAR UMKM DARI BACKEND -->
+        <section class="umkm-content-section">
+            <div class="umkm-section-heading">
+                <span class="tep-section-label">PRODUK DAN USAHA LOKAL</span>
+                <h2 class="section-title">Jelajahi UMKM</h2>
+                <p>Temukan produk dan usaha masyarakat di Kawasan Transmigrasi Jelai-Nibung.</p>
+            </div>
+
+            <div class="umkm-grid">
+                <!-- Data tetap dimuat otomatis oleh script.js -->
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-main">
+            <div class="footer-about">
+                <a class="footer-brand" href="index.html">
+                    <span class="footer-brand-icon"><i class="fa-solid fa-seedling" aria-hidden="true"></i></span>
+                    <span>KT JELAI-NIBUNG</span>
+                </a>
+                <p>
+                    Pusat informasi Kawasan Transmigrasi Jelai-Nibung yang menyajikan
+                    profil desa, potensi lokal, UMKM, dan cerita masyarakat.
+                </p>
+            </div>
+            <div class="footer-navigation">
+                <h3>Navigasi</h3>
+                <a href="index.html">Beranda</a>
+                <a href="tep2026.html">TEP 2026</a>
+                <a href="profil-desa.html">Profil Desa</a>
+                <a href="umkm.html">UMKM</a>
+                <a href="cerita-kawasan.html">Cerita Kawasan</a>
+            </div>
+            <div class="footer-location">
+                <h3>Lokasi Kawasan</h3>
+                <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>Kecamatan Jelai, Kabupaten Sukamara, Kalimantan Tengah, Indonesia.</span>
+                </p>
+                <p><i class="fa-solid fa-seedling" aria-hidden="true"></i>
+                    <span>Mengenal potensi dan kehidupan masyarakat di Kawasan Transmigrasi Jelai-Nibung.</span>
+                </p>
+            </div>
         </div>
-        
-        <h1>Unit Mikro Kecil dan Menengah</h1>
-        <p>Mengenal UMKM di 5 Desa Kawasan Transmigrasi</p>
-
-        <div id="admin-umkm-container" style="display: none; text-align: right; margin-bottom: 25px;">
-            <button id="btnBukaForm" style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px;">
-                <i class="fa-solid fa-plus"></i> Tambah UMKM
-            </button>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Kawasan Transmigrasi Jelai-Nibung · Tim Ekspedisi Patriot</p>
+            <a href="index.html">Kembali ke atas <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
         </div>
-
-        <!-- FORM TAMBAH / EDIT UMKM (2 KOLOM) -->
-        <div id="form-umkm-modal" style="display: none; background: #fff; padding: 25px; margin: 0 auto 25px auto; max-width: 800px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); text-align: left;">
-            <h3 id="modal-title" style="margin-bottom: 20px; color: #333;">Form Tambah UMKM Baru</h3>
-            <form id="formTambahUMKM">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Nama UMKM</label>
-                        <input type="text" id="inputNama" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                    </div>
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Nama Pemilik</label>
-                        <input type="text" id="inputPemilik" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                    </div>
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Asal Desa</label>
-                        <input type="text" id="inputDesa" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                    </div>
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Nama Produk</label>
-                        <input type="text" id="inputProduk" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                    </div>
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Kisaran Harga</label>
-                        <input type="text" id="inputHarga" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Contoh: Rp 15.000 - Rp 35.000">
-                    </div>
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">No. WhatsApp / Kontak</label>
-                        <input type="text" id="inputKontak" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Contoh: 081234567890">
-                    </div>
-                    
-                    <div style="grid-column: span 2;">
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Lokasi / Alamat Lengkap</label>
-                        <input type="text" id="inputLokasi" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                    </div>
-                    
-                    <div style="grid-column: span 2;">
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Pilih Gambar (File)</label>
-                        <input type="file" id="inputGambar" accept="image/*" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                    </div>
-                    
-                    <div style="grid-column: span 2;">
-                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Deskripsi UMKM</label>
-                        <textarea id="inputDeskripsi" required style="width: 100%; height: 90px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"></textarea>
-                    </div>
-
-                </div>
-                <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: bold;">Simpan ke Database</button>
-                <button type="button" id="btnBatal" style="background: #6c757d; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; margin-left: 10px;">Batal</button>
-            </form>
-        </div>
-
-        <!-- GRID UMKM -->
-        <div class="umkm-grid">
-            <!-- Data dimuat otomatis dari backend -->
-        </div>
-    </section>
-
-    <footer>
-        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
-        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
     </footer>
 
     <script src="js/script.js"></script>

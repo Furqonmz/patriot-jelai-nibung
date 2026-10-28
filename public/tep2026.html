@@ -3,258 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tim Ekspedisi Patriot 2026</title>
-    <!-- Font Poppins untuk keseragaman -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome untuk Icon -->
+    <title>TEP 2026 | Kawasan Transmigrasi Jelai-Nibung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="tep-page">
 
-    <!-- NAVBAR -->
-    <nav>
-        <div class="logo">
-            <i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG
-        </div>
+    <div class="site-topbar">
+        <p>Program <strong>Tim Ekspedisi Patriot 2026</strong> · Kementerian Transmigrasi RI × Universitas Padjadjaran</p>
+    </div>
 
+    <nav class="site-navbar">
+        <a class="logo" href="index.html" aria-label="Beranda Kawasan Transmigrasi Jelai-Nibung">
+            <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+            <span>
+                <strong>KT JELAI-NIBUNG</strong>
+                <small>Kawasan Transmigrasi · Kecamatan Jelai</small>
+            </span>
+        </a>
         <div class="nav-links">
             <a href="index.html">HOME</a>
-            <a href="tep2026.html" class="active" style="color: var(--secondary-blue);">TEP 2026</a>
+            <a href="tep2026.html" class="active">TEP 2026</a>
             <a href="profil-desa.html">PROFIL DESA</a>
             <a href="umkm.html">UMKM</a>
             <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
         </div>
-
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
+        <button class="hamburger" type="button" aria-label="Buka menu navigasi" aria-expanded="false">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section class="tep-hero">
+    <main> 
+        <section class="tep-hero-modern">
+            <div class="tep-hero-overlay"></div>
+            <div class="tep-hero-content"> 
 
-        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
-        <div class="breadcrumb-box">
-            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
-                <i class="fa-solid fa-house"></i>
-            </a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="" class="breadcrumb-item">TEP 2026</a>
+                <div class="breadcrumb-box">
+                    <a href="index.html" class="breadcrumb-item"
+                    title="Kembali ke Beranda">
+                        <i class="fa-solid fa-house"></i>
+                    </a>
+
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">TEP 2026</span>
+                </div>  
+
+                <p class="tep-kicker">RISET · KOLABORASI · PENDAMPINGAN</p>
+                <h1>Tim Ekspedisi<br><span>Patriot 2026</span></h1>
+                <p class="tep-hero-lead">Bersama mengenali potensi kawasan, mendukung pengembangan ekonomi lokal, dan merumuskan langkah pembangunan yang berkelanjutan.</p>
+                <div class="tep-hero-actions">
+                    <a class="tep-primary-btn" href="#tentang-tep">Jelajahi Program <i class="fa-solid fa-arrow-down"></i></a>
+                    <button class="tep-secondary-btn" type="button" data-open-tep-modal>Kenali TEP 2026 <i class="fa-regular fa-circle-play"></i></button>
+                </div>
+                <div class="tep-hero-note"><i class="fa-solid fa-seedling"></i> Fokus kawasan: pertanian jeruk, potensi lokal, dan pemberdayaan masyarakat</div>
+            </div>
+            <div class="tep-hero-image" role="img" aria-label="Ilustrasi kolaborasi dan kegiatan lapangan"></div>
+        </section>
+
+        <section class="tep-highlight-strip" aria-label="Ringkasan program">
+            <article class="tep-highlight">
+                <span class="tep-highlight-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></span>
+                <div><small>Pendekatan</small><strong>Riset & observasi</strong></div>
+            </article>
+            <article class="tep-highlight">
+                <span class="tep-highlight-icon"><i class="fa-solid fa-people-group"></i></span>
+                <div><small>Kolaborasi</small><strong>Tim dan masyarakat</strong></div>
+            </article>
+            <article class="tep-highlight">
+                <span class="tep-highlight-icon"><i class="fa-solid fa-leaf"></i></span>
+                <div><small>Potensi lokal</small><strong>Pertanian dan UMKM</strong></div>
+            </article>
+            <article class="tep-highlight">
+                <span class="tep-highlight-icon"><i class="fa-solid fa-chart-line"></i></span>
+                <div><small>Orientasi</small><strong>Pengembangan berkelanjutan</strong></div>
+            </article>
+        </section>
+
+        <section id="tentang-tep" class="tep-section">
+            <div class="tep-about-grid">
+                <div class="tep-about-copy">
+                    <article class="tep-info-card">
+                        <span class="tep-card-number">01</span>
+                        <div><h3>Apa itu TEP?</h3><p>Tim Ekspedisi Patriot (TEP) merupakan program riset, kajian, dan pendampingan di kawasan transmigrasi yang melibatkan sumber daya manusia dari perguruan tinggi untuk mendukung pengembangan kawasan.</p></div>
+                    </article>
+                    <article class="tep-info-card">
+                        <span class="tep-card-number">02</span>
+                        <div><h3>Mengapa kawasan ini penting?</h3><p>Kawasan memiliki potensi lokal yang dapat dikembangkan. Pengumpulan informasi lapangan membantu mengenali kebutuhan, peluang, dan tantangan sebagai bahan rekomendasi pembangunan.</p></div>
+                    </article>
+                    <article class="tep-info-card">
+                        <span class="tep-card-number">03</span>
+                        <div><h3>Fokus Jelai-Nibung</h3><p>Pengembangan potensi pertanian, khususnya komoditas jeruk, pengolahan hasil, penguatan UMKM, serta pemanfaatan teknologi yang sesuai dengan kebutuhan masyarakat.</p></div>
+                    </article>
+                    <button class="tep-text-link" type="button" data-open-tep-modal>Lihat ringkasan program <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+                <div class="tep-about-visual">
+                    <img src="img/timtep.jpeg" alt="Tim Ekspedisi Patriot di kawasan" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1100&q=85';">
+                    <div class="tep-image-caption"><i class="fa-solid fa-location-dot"></i><span><strong>Jelai–Nibung</strong><small>Kecamatan Jelai, Kabupaten Sukamara, Kalimantan Tengah</small></span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tep-section tep-focus-section">
+            <div class="tep-section-heading">
+                <h2>FOKUS PROGRAM</h2>
+                <p>Beberapa bidang yang menjadi perhatian dalam pengembangan kawasan.</p>
+            </div>
+            <div class="tep-focus-grid">
+                <article class="tep-focus-card"><span><i class="fa-solid fa-leaf"></i></span><h3>Pertanian & komoditas</h3><p>Mengenali potensi budidaya dan peluang peningkatan nilai tambah hasil pertanian.</p></article>
+                <article class="tep-focus-card"><span><i class="fa-solid fa-gears"></i></span><h3>Teknologi tepat guna</h3><p>Menjajaki pemanfaatan teknologi yang relevan dengan kebutuhan dan kondisi setempat.</p></article>
+                <article class="tep-focus-card"><span><i class="fa-solid fa-store"></i></span><h3>Pengembangan UMKM</h3><p>Mendukung dokumentasi produk, informasi usaha, dan peluang pengembangan pasar.</p></article>
+                <article class="tep-focus-card"><span><i class="fa-solid fa-users"></i></span><h3>Pemberdayaan masyarakat</h3><p>Menguatkan kolaborasi dan pertukaran pengetahuan bersama masyarakat kawasan.</p></article>
+                <article class="tep-focus-card"><span><i class="fa-solid fa-chart-column"></i></span><h3>Riset & rekomendasi</h3><p>Menyusun informasi dan kajian sebagai bahan pertimbangan pengembangan kawasan.</p></article>
+            </div>
+        </section>
+
+        <section class="tep-team-section">
+            <div class="tep-section-heading">
+                <h2>TIM EKSPEDISI PATRIOT</h2>
+                <p>Kenali anggota tim yang berkontribusi dalam kegiatan di kawasan Jelai-Nibung.</p>
+            </div>
+            <div class="tep-team-grid">
+                <article class="tep-member-card"><div class="tep-member-photo"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=500&q=80" alt="Gofarana Wilar"></div><div class="tep-member-info"><span class="tep-member-role">Ketua</span><h3>Gofarana Wilar, Ph.D.</h3><p>Farmasi</p><small>Ketua Ekspedisi</small></div></article>
+                <article class="tep-member-card"><div class="tep-member-photo"><img src="img/abad.jpeg" alt="Abad Bastian" onerror="this.style.display='none'"></div><div class="tep-member-info"><span class="tep-member-role">Anggota</span><h3>Abad Bastian, S.TP.</h3><p>Teknik Pertanian</p><small>Peneliti Utama</small></div></article>
+                <article class="tep-member-card"><div class="tep-member-photo"><img src="img/Furqon.jpg" alt="Furqon Muhammad Zulkifli" onerror="this.style.display='none'"></div><div class="tep-member-info"><span class="tep-member-role">Anggota</span><h3>Furqon Muhammad Zulkifli, S.T.</h3><p>Teknik Elektro</p><small>Pengembangan Website</small></div></article>
+                <article class="tep-member-card"><div class="tep-member-photo"><img src="img/Farah.jpeg" alt="Farah Najwa" onerror="this.style.display='none'"></div><div class="tep-member-info"><span class="tep-member-role">Anggota</span><h3>Farah Najwa, S.Kep.</h3><p>Keperawatan</p><small>Koordinator Media</small></div></article>
+                <article class="tep-member-card"><div class="tep-member-photo"><img src="img/amel.jpeg" alt="Rizky Amalia" onerror="this.style.display='none'"></div><div class="tep-member-info"><span class="tep-member-role">Anggota</span><h3>Rizky Amalia, S.Agr.</h3><p>Agribisnis</p><small>Koordinator Media</small></div></article>
+                <article class="tep-member-card"><div class="tep-member-photo"><img src="img/Listi.jpeg" alt="Listiana" onerror="this.style.display='none'"></div><div class="tep-member-info"><span class="tep-member-role">Anggota</span><h3>Listiana, S.KM.</h3><p>Kesehatan Masyarakat</p><small>Koordinator Media</small></div></article>
+            </div>
+            <p class="tep-data-note"><i class="fa-solid fa-circle-info"></i> Silakan periksa kembali ejaan nama, gelar, peran, dan foto tim sebelum website dipublikasikan.</p>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-main">
+            <div class="footer-about">
+                <a class="footer-brand" href="index.html">
+                    <span class="footer-brand-icon"><i class="fa-solid fa-seedling" aria-hidden="true"></i></span>
+                    <span>KT JELAI-NIBUNG</span>
+                </a>
+                <p>
+                    Pusat informasi Kawasan Transmigrasi Jelai-Nibung yang menyajikan
+                    profil desa, potensi lokal, UMKM, dan cerita masyarakat.
+                </p>
+            </div>
+            <div class="footer-navigation">
+                <h3>Navigasi</h3>
+                <a href="index.html">Beranda</a>
+                <a href="tep2026.html">TEP 2026</a>
+                <a href="profil-desa.html">Profil Desa</a>
+                <a href="umkm.html">UMKM</a>
+                <a href="cerita-kawasan.html">Cerita Kawasan</a>
+            </div>
+            <div class="footer-location">
+                <h3>Lokasi Kawasan</h3>
+                <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>Kecamatan Jelai, Kabupaten Sukamara, Kalimantan Tengah, Indonesia.</span>
+                </p>
+                <p><i class="fa-solid fa-seedling" aria-hidden="true"></i>
+                    <span>Mengenal potensi dan kehidupan masyarakat di Kawasan Transmigrasi Jelai-Nibung.</span>
+                </p>
+            </div>
         </div>
-
-        <h1>TIM EKSPEDISI PATRIOT 2026</h1>
-        <p class="subtitle">Misi Besar, Kerja Nyata, Dampak untuk Indonesia</p>
-        
-        <div class="hero-image-container">
-            <!-- Ganti src dengan foto tim besar Anda -->
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Foto Tim Ekspedisi">
-        </div>
-        
-        <div class="hero-action">
-            <a href="#tentang" class="btn btn-outline">Pelajari Selengkapnya</a>
-        </div>
-    </section>
-
-    <!-- TENTANG PROGRAM -->
-    <section id="tentang" class="bg-light">
-        <h2 class="section-title">Tentang Program</h2>
-        <div class="tentang-grid">
-            <!-- Kolom Kiri -->
-            <div class="tentang-left">
-                <div class="card">
-                    <h3>Apa itu TEP?</h3>
-                    <p>Tim Ekspedisi Patriot (TEP) adalah program pengabdian dan penelitian berkelanjutan yang melibatkan mahasiswa dan akademisi untuk mendorong inovasi dan pengembangan potensi desa di kawasan transmigrasi secara nyata.</p>
-                </div>
-                <div class="card">
-                    <h3>Latar Belakang</h3>
-                    <p>Kawasan transmigrasi memiliki potensi besar namun seringkali terkendala oleh akses teknologi dan inovasi pengolahan. Program ini lahir untuk menjembatani kesenjangan tersebut melalui kolaborasi perguruan tinggi dan masyarakat.</p>
-                </div>
-            </div>
-            <!-- Kolom Kanan (Foto) -->
-            <div>
-                <!-- Ganti src dengan foto kegiatan -->
-                <img class="tentang-right-img" src="https://images.unsplash.com/photo-1593113563332-e147ce106408?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kegiatan TEP">
-            </div>
-        </div>
-    </section>
-
-    <!-- TUJUAN -->
-    <section>
-        <h2 class="section-title">Tujuan</h2>
-        <div class="tujuan-card">
-            <h3>Tujuan Utama Ekspedisi</h3>
-            <p style="color: var(--text-light); font-size: 1.1rem;">
-                Membangun ekosistem ekonomi yang mandiri di Kawasan Transmigrasi Jelai Nibung dengan fokus pada optimalisasi pertanian jeruk organik, pendampingan UMKM berbasis teknologi tepat guna, serta peningkatan kapasitas sumber daya manusia (SDM) lokal secara berkelanjutan.
-            </p>
-        </div>
-    </section>
-
-    <!-- FOKUS PROGRAM -->
-    <section class="bg-light">
-        <h2 class="section-title">Fokus Program</h2>
-        <div class="fokus-grid">
-            <!-- Kotak 1 -->
-            <div class="fokus-box">
-                <i class="fa-solid fa-leaf"></i>
-                <h4>Pertanian Organik</h4>
-            </div>
-            <!-- Kotak 2 -->
-            <div class="fokus-box">
-                <i class="fa-solid fa-microchip"></i>
-                <h4>Teknologi Tepat Guna</h4>
-            </div>
-            <!-- Kotak 3 -->
-            <div class="fokus-box">
-                <i class="fa-solid fa-store"></i>
-                <h4>Pengembangan UMKM</h4>
-            </div>
-            <!-- Kotak 4 -->
-            <div class="fokus-box">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <h4>Edukasi & SDM</h4>
-            </div>
-            <!-- Kotak 5 -->
-            <div class="fokus-box">
-                <i class="fa-solid fa-chart-line"></i>
-                <h4>Riset Berkelanjutan</h4>
-            </div>
-        </div>
-    </section>
-
-    <!-- MEET OUR TEAM -->
-    <section>
-        <h2 class="section-title">Meet Our Team</h2>
-        <div class="team-grid">
-            
-            <!-- Anggota 1 (Ketua) -->
-            <div class="team-card">
-                <div class="team-img-wrapper">
-                    <span class="team-badge">Ketua</span>
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Gofarana Wilar">
-                </div>
-                <div class="team-info">
-                    <div class="team-header">
-                        <h4>Gofarana Wilar, P. hD.</h4>
-                        <p class="major">Farmasi</p>
-                        <p class="role">Sebagai Ketua Ekspedisi</p>
-                    </div>
-                    <div class="team-quote">
-                        "Inovasi sejati lahir saat ilmu pengetahuan bertemu dengan kebutuhan nyata masyarakat."
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anggota 2 -->
-            <div class="team-card">
-                <div class="team-img-wrapper">
-                    <span class="team-badge" style="background: var(--light-blue); color: var(--primary-blue); border: 1px solid var(--secondary-blue);">Anggota</span>
-                    <img src="img/abad.jpeg" alt="Anggota">
-                </div>
-                <div class="team-info">
-                    <div class="team-header">
-                        <h4>Abad Bastian S.TP</h4>
-                        <p class="major">Teknik Pertanian</p>
-                        <p class="role">Sebagai Peneliti Utama</p>
-                    </div>
-                    <div class="team-quote">
-                        "Mengolah hasil tani menjadi produk unggulan adalah kunci kemandirian ekonomi desa."
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anggota 3 -->
-            <div class="team-card">
-                <div class="team-img-wrapper">
-                    <span class="team-badge" style="background: var(--light-blue); color: var(--primary-blue); border: 1px solid var(--secondary-blue);">Anggota</span>
-                    <img src="img/Furqon.jpg" alt="Anggota">
-                </div>
-                <div class="team-info">
-                    <div class="team-header">
-                        <h4>Furqon Muhammad Zulkifli S.T</h4>
-                        <p class="major">Teknik Elektro</p>
-                        <p class="role">Anggota - Sebagai Web Develover</p>
-                    </div>
-                    <div class="team-quote">
-                        "Membangun sarana bukan sekadar fisik, tapi membuka jalan untuk peluang baru."
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anggota 4 -->
-            <div class="team-card">
-                <div class="team-img-wrapper">
-                    <span class="team-badge" style="background: var(--light-blue); color: var(--primary-blue); border: 1px solid var(--secondary-blue);">Anggota</span>
-                    <img src="img/Farah.jpeg" alt="Anggota">
-                </div>
-                <div class="team-info">
-                    <div class="team-header">
-                        <h4>Farah Najwa S.Kep</h4>
-                        <p class="major">Keperawatan</p>
-                        <p class="role">Sebagai Koordinator Media</p>
-                    </div>
-                    <div class="team-quote">
-                        "Cerita sukses masyarakat adalah inspirasi terbesar yang harus dibagikan ke dunia."
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anggota 5 -->
-            <div class="team-card">
-                <div class="team-img-wrapper">
-                    <span class="team-badge" style="background: var(--light-blue); color: var(--primary-blue); border: 1px solid var(--secondary-blue);">Anggota</span>
-                    <img src="img/amel.jpeg" alt="Anggota">
-                </div>
-                <div class="team-info">
-                    <div class="team-header">
-                        <h4>Rizky Amalia S.Agr</h4>
-                        <p class="major">Agribisnis</p>
-                        <p class="role">Sebagai Koordinator Media</p>
-                    </div>
-                    <div class="team-quote">
-                        "Cerita sukses masyarakat adalah inspirasi terbesar yang harus dibagikan ke dunia."
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anggota 6 -->
-            <div class="team-card">
-                <div class="team-img-wrapper">
-                    <span class="team-badge" style="background: var(--light-blue); color: var(--primary-blue); border: 1px solid var(--secondary-blue);">Anggota</span>
-                    <img src="img/Listi.jpeg" alt="Anggota">
-                </div>
-                <div class="team-info">
-                    <div class="team-header">
-                        <h4>Listiana S.Km</h4>
-                        <p class="major">Kesehatan Masyarakat</p>
-                        <p class="role">Sebagai Koordinator Media</p>
-                    </div>
-                    <div class="team-quote">
-                        "Cerita sukses masyarakat adalah inspirasi terbesar yang harus dibagikan ke dunia."
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- CONTACT US & FOOTER -->
-    <section class="contact-section bg-light">
-        <h2 class="section-title">Contact Us</h2>
-        <p style="margin-bottom: 20px;">Memiliki pertanyaan atau ingin berkolaborasi dengan program kami? Jangan ragu untuk menghubungi kami melalui platform di bawah ini.</p>
-        <a href="mailto:email@contoh.com" class="btn">Hubungi Kami</a>
-    </section>
-
-    <footer>
-        <div>
-            <i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026
-        </div>
-        <div>
-            <i class="fa-brands fa-instagram"></i> @patriotjelainibung
+        <div class="footer-bottom">
+            <p>&copy; 2026 Kawasan Transmigrasi Jelai-Nibung · Tim Ekspedisi Patriot</p>
+            <a href="index.html">Kembali ke atas <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT -->
-    <script src="js/script.js?v=2"></script>
+    <!-- POPUP RINGKASAN TEP: dibuka melalui tombol, tidak muncul otomatis -->
+    <div class="tep-modal" id="tepInfoModal" aria-hidden="true">
+        <div class="tep-modal-backdrop" data-close-tep-modal></div>
+        <section class="tep-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="tepModalTitle">
+            <button class="tep-modal-close" type="button" aria-label="Tutup popup" data-close-tep-modal><i class="fa-solid fa-xmark"></i></button>
+            <span class="tep-modal-icon"><i class="fa-solid fa-compass"></i></span>
+            <span class="tep-section-label">RINGKASAN PROGRAM</span>
+            <h2 id="tepModalTitle">Mengenal Tim Ekspedisi Patriot 2026</h2>
+            <p>TEP 2026 berfokus pada riset, kajian, dan pendampingan di kawasan transmigrasi. Di Jelai-Nibung, perhatian diarahkan pada pengenalan potensi pertanian jeruk, pengolahan hasil, UMKM, serta kebutuhan pengembangan kawasan.</p>
+            <div class="tep-modal-points"><span><i class="fa-solid fa-check"></i> Mengenali potensi dan tantangan</span><span><i class="fa-solid fa-check"></i> Berkolaborasi dengan masyarakat</span><span><i class="fa-solid fa-check"></i> Mendukung rekomendasi pengembangan</span></div>
+            <a class="tep-primary-btn" href="#tentang-tep" data-close-tep-modal>Pelajari bagian program <i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+    </div>
+
+    <script src="js/script.js?v=3" defer></script>
 </body>
 </html>

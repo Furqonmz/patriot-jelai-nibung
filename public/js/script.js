@@ -15,41 +15,6 @@ window.addEventListener('scroll', function() {
 });
 
 // ==========================================
-// KONTROL RESPONSIVE NAVBAR (HAMBURGER MENU)
-// ==========================================
-document.addEventListener("DOMContentLoaded", function() {
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-
-    if (hamburger && navLinks) {
-        // Ketika tombol hamburger diklik, buka/tutup menu vertikal
-        hamburger.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-            
-            // Mengubah ikon hamburger menjadi silang (X) atau sebaliknya (opsional)
-            const icon = hamburger.querySelector('i');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-xmark');
-            } else {
-                icon.classList.remove('fa-xmark');
-                icon.classList.add('fa-bars');
-            }
-        });
-
-        // Menutup menu otomatis ketika salah satu link menu diklik
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                const icon = hamburger.querySelector('i');
-                icon.classList.remove('fa-xmark');
-                icon.classList.add('fa-bars');
-            });
-        });
-    }
-});
-
-// ==========================================
 // 2. CAROUSEL DESA DI HALAMAN HOME
 // ==========================================
 // Fungsi ini bertugas menggeser (scroll) daftar kartu desa ke kiri atau kanan
@@ -633,5 +598,113 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             detailNamaUMKM.innerText = "URL tidak valid";
         }
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // HEADER GLOBAL — SEMUA HALAMAN
+    const topbar = document.querySelector(".site-topbar");
+    const navbar = document.querySelector(".site-navbar");
+
+    function updateHeader() {
+        if (!topbar || !navbar) return;
+
+        if (window.scrollY > 50) {
+            topbar.classList.add("hide-topbar");
+            navbar.style.top = "0";
+        } else {
+            topbar.classList.remove("hide-topbar");
+            navbar.style.top = "";
+        }
+    }
+
+    window.addEventListener("scroll", updateHeader, { passive: true });
+    updateHeader();
+
+    // NAVBAR MOBILE — SEMUA HALAMAN
+    // Gunakan tombol hamburger anak langsung navbar agar tidak bentrok
+    // dengan markup lama yang menempatkan ikon di dalam nav-links.
+    const hamburger = document.querySelector(".site-navbar > .hamburger");
+    const navLinks = document.querySelector(".site-navbar > .nav-links");
+
+    if (hamburger && navLinks) {
+        hamburger.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("active");
+            hamburger.setAttribute("aria-expanded", String(isOpen));
+
+            const icon = hamburger.querySelector("i");
+            if (icon) {
+                icon.classList.toggle("fa-bars", !isOpen);
+                icon.classList.toggle("fa-xmark", isOpen);
+            }
+        });
+
+        navLinks.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("active");
+                hamburger.setAttribute("aria-expanded", "false");
+
+                const icon = hamburger.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("fa-xmark");
+                    icon.classList.add("fa-bars");
+                }
+            });
+        });
+
+        window.addEventListener("resize", function () {
+            if (window.innerWidth > 768) {
+                navLinks.classList.remove("active");
+                hamburger.setAttribute("aria-expanded", "false");
+
+                const icon = hamburger.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("fa-xmark");
+                    icon.classList.add("fa-bars");
+                }
+            }
+        });
+    }
+
+    // POPUP TEP — KHUSUS HALAMAN YANG MEMILIKI POPUP
+    const modal = document.getElementById("tepInfoModal");
+
+    if (modal) {
+        const openButtons = document.querySelectorAll("[data-open-tep-modal]");
+        const closeButtons = modal.querySelectorAll("[data-close-tep-modal]");
+        let lastFocusedElement = null;
+
+        function openModal() {
+            lastFocusedElement = document.activeElement;
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+
+            const closeButton = modal.querySelector(".tep-modal-close");
+            if (closeButton) closeButton.focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+
+            if (lastFocusedElement) lastFocusedElement.focus();
+        }
+
+        openButtons.forEach(button =>
+            button.addEventListener("click", openModal)
+        );
+
+        closeButtons.forEach(button =>
+            button.addEventListener("click", closeModal)
+        );
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && modal.classList.contains("is-open")) {
+                closeModal();
+            }
+        });
     }
 });

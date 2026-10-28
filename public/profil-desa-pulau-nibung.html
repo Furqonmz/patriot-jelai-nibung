@@ -11,7 +11,7 @@
     <!-- Leaflet untuk peta -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="">
 
     <style>
         :root {
@@ -491,6 +491,81 @@
             font-size: 12px;
         }
 
+
+        /* Tambahan: demografi, tabel, dan struktur organisasi */
+        .demography-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .panel h3 { margin: 0 0 16px; font-size: 16px; }
+        .stat-list { display: grid; gap: 15px; }
+        .stat-line { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; }
+        .stat-line span { color: var(--text); }
+        .stat-line strong { text-align: right; }
+        .data-note {
+            margin-top: 16px;
+            color: #7a898f;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+        .org-chart { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .org-node {
+            width: min(100%, 270px);
+            padding: 15px 18px;
+            text-align: center;
+            background: white;
+            border: 1px solid #dbe5e8;
+            border-radius: 12px;
+            box-shadow: 0 5px 16px rgba(24,55,65,.05);
+        }
+        .org-node.top {
+            color: white;
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        .org-node strong { display: block; font-size: 13px; margin-bottom: 5px; }
+        .org-node small { display: block; font-size: 11px; opacity: .82; }
+        .org-connector { width: 1px; height: 18px; background: #b9c9ce; margin-top: -18px; margin-bottom: -18px; }
+        .org-branches {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+            align-items: start;
+        }
+        .org-branches .org-node { width: 100%; height: 100%; }
+        .simple-table-wrap { overflow-x: auto; }
+        .simple-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .simple-table th, .simple-table td {
+            padding: 13px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+        .simple-table th { background: #f1f6f4; color: #617178; font-size: 11px; }
+        .simple-table tr:last-child td { border-bottom: 0; }
+        .placeholder { color: #8b989d; font-style: italic; }
+        .section-kicker { color: var(--green); font-size: 12px; font-weight: 700; }
+        @media (max-width: 700px) {
+            .demography-layout { grid-template-columns: 1fr; }
+            .org-branches { grid-template-columns: 1fr; }
+            .org-connector { display: none; }
+        }
+
         @media (max-width: 900px) {
             .nav-links { display: none; }
             .hamburger { display: block; font-size: 20px; }
@@ -630,7 +705,7 @@
             </p>
 
             <p>
-                Kehidupan masyarakat di wilayah ini berkaitan erat dengan
+                Berdasarkan informasi awal yang perlu dikonfirmasi melalui observasi dan sumber desa, kehidupan masyarakat di wilayah ini berkaitan erat dengan
                 aktivitas pertanian, perikanan, serta pemanfaatan potensi
                 sumber daya lokal. Hal tersebut menjadi bagian penting dalam
                 melihat perkembangan dan karakter kawasan.
@@ -682,9 +757,105 @@
         <div class="data-card">
             <i class="fa-solid fa-location-crosshairs"></i>
             <small>Koordinat</small>
-            <strong>-2.75, 111.25</strong>
+            <strong class="placeholder">Verifikasi koordinat</strong>
         </div>
 
+    </div>
+</section>
+
+
+
+<!-- DEMOGRAFI -->
+<section class="section">
+    <div class="section-title">
+        <span>04 — Demografi</span>
+        <h2>Gambaran Penduduk</h2>
+        <p>Ringkasan kondisi penduduk berdasarkan data resmi atau hasil pendataan yang sudah diverifikasi. Cantumkan tahun data agar informasi tidak menyesatkan.</p>
+    </div>
+
+    <div class="demography-layout">
+        <div class="panel">
+            <h3>Komposisi Penduduk</h3>
+            <div class="stat-list">
+                <div class="stat-line"><span>Total penduduk</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Laki-laki</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Perempuan</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Kepala keluarga (KK)</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Jumlah dusun / RT / RW</span><strong class="placeholder">Belum diisi</strong></div>
+            </div>
+            <p class="data-note">Tahun data: belum diisi. Jangan mengisi angka perkiraan sebagai data resmi.</p>
+        </div>
+
+        <div class="panel">
+            <h3>Karakteristik Penduduk</h3>
+            <div class="stat-list">
+                <div class="stat-line"><span>Kelompok usia</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Pendidikan terakhir</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Mata pencaharian utama</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Jumlah penduduk usia produktif</span><strong class="placeholder">Belum diisi</strong></div>
+            </div>
+            <p class="data-note">Data karakteristik sebaiknya berupa rekap agregat, bukan daftar data pribadi penduduk.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STRUKTUR ORGANISASI -->
+<section class="section">
+    <div class="section-title">
+        <span>05 — Pemerintahan Desa</span>
+        <h2>Struktur Organisasi Pemerintahan</h2>
+        <p>Gunakan struktur resmi terbaru dari pemerintah desa. Jabatan di bawah ini merupakan tempat pengisian, bukan pernyataan bahwa jabatan tersebut pasti ada di desa.</p>
+    </div>
+
+    <div class="panel">
+        <div class="org-chart">
+            <div class="org-node top">
+                <strong>Kepala Desa</strong>
+                <small class="placeholder">Nama pejabat belum diisi</small>
+            </div>
+            <div class="org-connector"></div>
+            <div class="org-node">
+                <strong>Sekretaris Desa</strong>
+                <small class="placeholder">Nama pejabat belum diisi</small>
+            </div>
+            <div class="org-connector"></div>
+            <div class="org-branches">
+                <div class="org-node">
+                    <strong>Kepala Urusan (Kaur)</strong>
+                    <small class="placeholder">Nama dan bidang sesuai struktur resmi</small>
+                </div>
+                <div class="org-node">
+                    <strong>Kepala Seksi (Kasi)</strong>
+                    <small class="placeholder">Nama dan bidang sesuai struktur resmi</small>
+                </div>
+                <div class="org-node">
+                    <strong>Kepala Dusun / Wilayah</strong>
+                    <small class="placeholder">Nama dan wilayah sesuai struktur resmi</small>
+                </div>
+            </div>
+        </div>
+        <p class="data-note">Saran: tampilkan foto pejabat hanya jika tersedia dan penggunaannya telah mendapat izin. Jika struktur desa memiliki lebih banyak jabatan atau wilayah, bagan harus mengikuti dokumen resmi desa.</p>
+    </div>
+</section>
+
+<!-- FASILITAS DAN LAYANAN -->
+<section class="section">
+    <div class="section-title">
+        <span>06 — Fasilitas Desa</span>
+        <h2>Fasilitas dan Layanan</h2>
+        <p>Catat fasilitas yang benar-benar tersedia, lokasi, kondisi, dan keterangan aksesnya berdasarkan observasi.</p>
+    </div>
+    <div class="simple-table-wrap">
+        <table class="simple-table">
+            <thead><tr><th>Fasilitas</th><th>Jumlah</th><th>Kondisi</th><th>Keterangan / Lokasi</th></tr></thead>
+            <tbody>
+                <tr><td>Kantor desa</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Pendidikan</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Kesehatan</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Ibadah</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Jalan / jembatan / transportasi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+            </tbody>
+        </table>
     </div>
 </section>
 
@@ -696,7 +867,7 @@
         <span>03 — Lokasi</span>
         <h2>Lokasi & Akses</h2>
         <p>
-            Posisi Pulau Nibung dalam kawasan transmigrasi Jelai-Nibung.
+            Posisi desa berdasarkan koordinat yang perlu diverifikasi sebelum halaman dipublikasikan.
         </p>
     </div>
 
@@ -744,64 +915,11 @@
 </section>
 
 
-<!-- KEHIDUPAN MASYARAKAT -->
-<section class="section">
-
-    <div class="section-title">
-        <span>04 — Kehidupan</span>
-        <h2>Kehidupan Masyarakat</h2>
-        <p>
-            Aktivitas masyarakat menjadi bagian penting dari identitas sebuah desa.
-        </p>
-    </div>
-
-    <div class="cards-4">
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-wheat-awn"></i></div>
-            <h3>Pertanian</h3>
-            <p>
-                Aktivitas pertanian dan pengembangan komoditas menjadi salah
-                satu kegiatan ekonomi masyarakat.
-            </p>
-        </div>
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-fish"></i></div>
-            <h3>Perikanan</h3>
-            <p>
-                Sungai menjadi salah satu sumber daya yang mendukung aktivitas
-                perikanan masyarakat.
-            </p>
-        </div>
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-people-roof"></i></div>
-            <h3>Kegiatan Sosial</h3>
-            <p>
-                Dokumentasikan kegiatan masyarakat, gotong royong, kelompok
-                tani, dan aktivitas sosial lainnya.
-            </p>
-        </div>
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-house"></i></div>
-            <h3>Permukiman</h3>
-            <p>
-                Gambarkan karakter permukiman dan kondisi lingkungan tempat
-                masyarakat tinggal.
-            </p>
-        </div>
-
-    </div>
-</section>
-
-
 <!-- POTENSI -->
 <section class="section">
 
     <div class="section-title">
-        <span>05 — Potensi Lokal</span>
+        <span>07 — Potensi Lokal</span>
         <h2>Potensi Desa</h2>
         <p>
             Potensi yang dapat dikembangkan dari sumber daya lokal dan aktivitas masyarakat.
@@ -850,202 +968,11 @@
 </section>
 
 
-<!-- KOMODITAS -->
-<section class="section">
-
-    <div class="section-title">
-        <span>06 — Produk Lokal</span>
-        <h2>Komoditas Unggulan</h2>
-    </div>
-
-    <table class="commodity-table">
-
-        <thead>
-            <tr>
-                <th>Komoditas</th>
-                <th>Sektor</th>
-                <th>Hasil / Produk</th>
-                <th>Keterangan</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr>
-                <td>🍊 Jeruk</td>
-                <td>Pertanian</td>
-                <td>Buah jeruk</td>
-                <td>Komoditas lokal</td>
-            </tr>
-
-            <tr>
-                <td>🐟 Ikan Gabus</td>
-                <td>Perikanan</td>
-                <td>Ikan segar / olahan</td>
-                <td>Hasil perairan lokal</td>
-            </tr>
-
-            <tr>
-                <td>🦐 Udang</td>
-                <td>Perikanan</td>
-                <td>Udang sungai</td>
-                <td>Potensi hasil perairan</td>
-            </tr>
-        </tbody>
-
-    </table>
-</section>
-
-
-<!-- UMKM -->
-<section class="section">
-
-    <div class="section-title">
-        <span>07 — Ekonomi Lokal</span>
-        <h2>UMKM & Produk Lokal</h2>
-        <p>
-            Tampilkan beberapa produk atau pelaku UMKM yang berasal dari desa ini.
-        </p>
-    </div>
-
-    <div class="cards-4">
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-basket-shopping"></i></div>
-            <h3>Kerupuk Ikan</h3>
-            <p>
-                Contoh produk olahan ikan lokal. Tambahkan nama pelaku UMKM,
-                foto, dan informasi produk ketika datanya sudah tersedia.
-            </p>
-        </div>
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-store"></i></div>
-            <h3>UMKM Lainnya</h3>
-            <p>
-                Tambahkan produk lain yang ditemukan selama pendataan lapangan.
-            </p>
-        </div>
-
-    </div>
-</section>
-
-
-<!-- FASILITAS -->
-<section class="section">
-
-    <div class="section-title">
-        <span>08 — Infrastruktur</span>
-        <h2>Fasilitas Desa</h2>
-    </div>
-
-    <div class="cards-4">
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-school"></i></div>
-            <h3>Pendidikan</h3>
-            <p>Tambahkan sekolah atau fasilitas pendidikan yang tersedia.</p>
-        </div>
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-            <h3>Kesehatan</h3>
-            <p>Tambahkan fasilitas kesehatan dan akses pelayanan kesehatan.</p>
-        </div>
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-bolt"></i></div>
-            <h3>Listrik</h3>
-            <p>Jelaskan kondisi dan jangkauan listrik berdasarkan data lapangan.</p>
-        </div>
-
-        <div class="info-card">
-            <div class="info-icon"><i class="fa-solid fa-wifi"></i></div>
-            <h3>Telekomunikasi</h3>
-            <p>Tambahkan informasi jaringan seluler dan akses internet.</p>
-        </div>
-
-    </div>
-</section>
-
-
-<!-- TANTANGAN -->
-<section class="section">
-
-    <div class="challenge">
-
-        <div class="section-title">
-            <span>09 — Kondisi Kawasan</span>
-            <h2>Tantangan Desa</h2>
-            <p>
-                Bagian ini membuat profil lebih realistis dengan menampilkan
-                kondisi yang masih menjadi perhatian di lapangan.
-            </p>
-        </div>
-
-        <div class="challenge-grid">
-
-            <div class="challenge-item">
-                <i class="fa-solid fa-road"></i>
-                <strong>Akses & Transportasi</strong>
-                <p>
-                    Isi dengan kondisi akses jalan, sungai, atau transportasi
-                    menuju dan dari desa.
-                </p>
-            </div>
-
-            <div class="challenge-item">
-                <i class="fa-solid fa-box-open"></i>
-                <strong>Pemasaran Produk</strong>
-                <p>
-                    Isi dengan kendala pemasaran, distribusi, atau pengolahan
-                    hasil komoditas.
-                </p>
-            </div>
-
-            <div class="challenge-item">
-                <i class="fa-solid fa-tower-cell"></i>
-                <strong>Konektivitas</strong>
-                <p>
-                    Isi berdasarkan kondisi jaringan komunikasi dan internet
-                    yang ditemukan di lapangan.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- PROGRAM -->
-<section class="section">
-
-    <div class="program-box">
-
-        <div>
-            <h2>Pengembangan Kawasan</h2>
-            <p>
-                Hubungkan profil desa dengan program dan kegiatan TEP 2026,
-                seperti pengembangan komoditas, UMKM, digitalisasi informasi,
-                dan kegiatan masyarakat.
-            </p>
-        </div>
-
-        <a href="tep2026.html" class="button">
-            Lihat TEP 2026 <i class="fa-solid fa-arrow-right"></i>
-        </a>
-
-    </div>
-
-</section>
-
-
 <!-- DOKUMENTASI -->
 <section class="section">
 
     <div class="section-title">
-        <span>10 — Dokumentasi</span>
+        <span>08 — Dokumentasi</span>
         <h2>Potret Pulau Nibung</h2>
         <p>
             Sebaiknya gunakan foto asli hasil dokumentasi lapangan agar identitas
@@ -1076,35 +1003,6 @@
 </section>
 
 
-<!-- DESA LAIN -->
-<section class="section">
-
-    <div class="section-title">
-        <span>Jelai-Nibung</span>
-        <h2>Jelajahi Desa Lain</h2>
-        <p>
-            Gunakan bagian ini untuk menghubungkan profil Pulau Nibung dengan
-            desa-desa lain dalam kawasan transmigrasi.
-        </p>
-    </div>
-
-    <div class="next-villages">
-
-        <a href="#" class="village-link active">Pulau Nibung</a>
-        <a href="#" class="village-link">Sungai Baru</a>
-        <a href="#" class="village-link">Sungai Bundung</a>
-        <a href="#" class="village-link">Desa 4</a>
-        <a href="#" class="village-link">Desa 5</a>
-        <a href="#" class="village-link">Desa 6</a>
-        <a href="#" class="village-link">Desa 7</a>
-        <a href="#" class="village-link">Desa 8</a>
-        <a href="#" class="village-link">Desa 9</a>
-
-    </div>
-
-</section>
-
-
 <footer>
     <div>
         <i class="fa-regular fa-copyright"></i>
@@ -1122,13 +1020,14 @@
 
 <script>
     // Peta Pulau Nibung
-    const map = L.map('map').setView([-2.75, 111.25], 11);
+    const koordinatDesa = [-2.75, 111.25]; // GANTI dengan koordinat desa yang sudah diverifikasi
+    const map = L.map('map').setView(koordinatDesa, 11);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const marker = L.marker([-2.75, 111.25]).addTo(map);
+    const marker = L.marker(koordinatDesa).addTo(map);
 
     marker.bindPopup(`
         <strong>Desa Pulau Nibung</strong><br>

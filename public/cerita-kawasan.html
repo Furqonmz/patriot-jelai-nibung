@@ -8,69 +8,137 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="cerita-kawasan-page">
+    <div class="site-topbar">
+        <p>Program <strong>Tim Ekspedisi Patriot 2026</strong> · Kementerian Transmigrasi RI × Universitas Padjadjaran</p>
+    </div>
 
-    <nav>
-        <div class="logo"><i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG</div>
+    <nav class="site-navbar">
+        <a class="logo" href="index.html" aria-label="Beranda Kawasan Transmigrasi Jelai-Nibung">
+            <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+            <span>
+                <strong>KT JELAI-NIBUNG</strong>
+                <small>Kawasan Transmigrasi · Kecamatan Jelai</small>
+            </span>
+        </a>
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="tep2026.html">TEP 2026</a>
-            <a href="profil-desa.html">PROFIL DESA</a> 
+            <a href="profil-desa.html">PROFIL DESA</a>
             <a href="umkm.html">UMKM</a>
-            <a href="cerita-kawasan.html" class="active" style="color: var(--secondary-blue);">CERITA KAWASAN</a>
+            <a href="cerita-kawasan.html" class="active">CERITA KAWASAN</a>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
         </div>
-
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
+        <button class="hamburger" type="button" aria-label="Buka menu navigasi" aria-expanded="false">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
     </nav>
 
-    <section class="hero-cerita">
-        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
-        <div class="breadcrumb-box">
-            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
-                <i class="fa-solid fa-house"></i>
-            </a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="" class="breadcrumb-item">Cerita Kawasan</a>
+    <main>
+        <!-- HERO CERITA KAWASAN -->
+        <section class="hero-cerita">
+            <div class="breadcrumb-box">
+                <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">Cerita Kawasan</span>
+            </div>
+
+            <div class="cerita-hero-content">
+                <span class="tep-section-label">KABAR DAN CERITA MASYARAKAT</span>
+                <h1>Cerita Kawasan Transmigrasi</h1>
+                <p>
+                    Mengenal lima desa di Kawasan Transmigrasi Pulau Nibung
+                    melalui kabar terbaru, pencapaian, dan cerita inspiratif
+                    masyarakat setempat.
+                </p>
+            </div>
+        </section>
+
+        <!-- CERITA DAN KONTROL ADMIN -->
+        <section id="cerita" class="bg-light cerita-content-section">
+
+            <div id="admin-cerita-container" style="display: none; text-align: right; margin: 0 auto 25px; max-width: 1100px;">
+                <button id="btnBukaFormCerita" type="button"
+                    style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                    <i class="fa-solid fa-plus"></i> Tambah Cerita
+                </button>
+            </div>
+
+            <!-- FORM CERITA: ID TETAP -->
+            <div id="form-cerita-modal" style="display: none; background: #fff; padding: 25px; margin: 0 auto 25px; max-width: 600px; border-radius: 12px; box-shadow: 0 8px 30px rgba(14,49,83,0.12);">
+                <h3 id="modal-cerita-title">Tambah Cerita Baru</h3>
+
+                <form id="formTambahCerita">
+                    <input type="text" id="inputJudul" placeholder="Judul Cerita" required
+                        style="width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #d7e0ea; border-radius: 6px;">
+
+                    <input type="text" id="inputPenulis" placeholder="Nama Penulis" required
+                        style="width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #d7e0ea; border-radius: 6px;">
+
+                    <textarea id="inputDeskripsi" placeholder="Deskripsi Cerita" required
+                        style="width: 100%; min-height: 100px; margin-bottom: 10px; padding: 10px; box-sizing: border-box; border: 1px solid #d7e0ea; border-radius: 6px;"></textarea>
+
+                    <input type="file" id="inputGambarCerita" accept="image/*"
+                        style="width: 100%; margin-bottom: 15px; padding: 8px; box-sizing: border-box;">
+
+                    <button type="submit"
+                        style="background: #28a745; color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer;">
+                        Simpan
+                    </button>
+
+                    <button type="button" id="btnBatalCerita"
+                        style="background: #6c757d; color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; margin-left: 8px;">
+                        Batal
+                    </button>
+                </form>
+            </div>
+
+            <!-- DATA CERITA DARI BACKEND -->
+            <div id="wadah-cerita" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;">
+                <!-- Data cerita dimuat otomatis oleh script.js -->
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-main">
+            <div class="footer-about">
+                <a class="footer-brand" href="index.html">
+                    <span class="footer-brand-icon"><i class="fa-solid fa-seedling" aria-hidden="true"></i></span>
+                    <span>KT JELAI-NIBUNG</span>
+                </a>
+                <p>
+                    Pusat informasi Kawasan Transmigrasi Jelai-Nibung yang menyajikan
+                    profil desa, potensi lokal, UMKM, dan cerita masyarakat.
+                </p>
+            </div>
+            <div class="footer-navigation">
+                <h3>Navigasi</h3>
+                <a href="index.html">Beranda</a>
+                <a href="tep2026.html">TEP 2026</a>
+                <a href="profil-desa.html">Profil Desa</a>
+                <a href="umkm.html">UMKM</a>
+                <a href="cerita-kawasan.html">Cerita Kawasan</a>
+            </div>
+            <div class="footer-location">
+                <h3>Lokasi Kawasan</h3>
+                <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>Kecamatan Jelai, Kabupaten Sukamara, Kalimantan Tengah, Indonesia.</span>
+                </p>
+                <p><i class="fa-solid fa-seedling" aria-hidden="true"></i>
+                    <span>Mengenal potensi dan kehidupan masyarakat di Kawasan Transmigrasi Jelai-Nibung.</span>
+                </p>
+            </div>
         </div>
-
-        <h1>CERITA KAWASAN TRANSMIGRASI</h1>
-        <p>Mengenal 5 Desa di Kawasan Transmigrasi Pulau Nibung melalui kabar terbaru, pencapaian, dan cerita inspiratif masyarakat setempat.</p>
-    </section>
-
-    <!-- ... (Bagian atas HTML) ... -->
-    <section id="cerita" class="bg-light">
-        
-        <!-- KONTROL ADMIN -->
-        <div id="admin-cerita-container" style="display: none; text-align: right; margin-bottom: 25px;">
-            <button id="btnBukaFormCerita" style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">
-                <i class="fa-solid fa-plus"></i> Tambah Cerita
-            </button>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Kawasan Transmigrasi Jelai-Nibung · Tim Ekspedisi Patriot</p>
+            <a href="index.html">Kembali ke atas <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
         </div>
-
-        <!-- FORM MODAL -->
-        <div id="form-cerita-modal" style="display: none; background: #fff; padding: 25px; margin: 0 auto 25px auto; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
-            <h3 id="modal-cerita-title">Tambah Cerita Baru</h3>
-            <form id="formTambahCerita">
-                <input type="text" id="inputJudul" placeholder="Judul Cerita" required style="width:100%; margin-bottom:10px; padding:8px;">
-                <input type="text" id="inputPenulis" placeholder="Nama Penulis" required style="width:100%; margin-bottom:10px; padding:8px;">
-                <textarea id="inputDeskripsi" placeholder="Deskripsi Cerita" required style="width:100%; height:100px; margin-bottom:10px; padding:8px;"></textarea>
-                <input type="file" id="inputGambarCerita" accept="image/*" style="width:100%; margin-bottom:10px; padding:8px;">
-                <button type="submit" style="background: #28a745; color: white; padding: 10px; border:none; cursor:pointer;">Simpan</button>
-                <button type="button" id="btnBatalCerita" style="background: #666; color: white; padding: 10px; border:none; cursor:pointer;">Batal</button>
-            </form>
-        </div>
-
-        <!-- WADAH GRID CERITA -->
-        <div id="wadah-cerita" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;">
-            <!-- Data cerita dari backend akan masuk otomatis ke sini -->
-        </div>
-    </section>
-
-    <footer>
-        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
-        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
     </footer>
 
     <!-- JAVASCRIPT -->
