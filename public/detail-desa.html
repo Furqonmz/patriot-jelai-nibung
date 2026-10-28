@@ -3,80 +3,1040 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Desa Pulau Nibung</title>
+    <title>Profil Desa Pulau Nibung | KT Jelai-Nibung</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Leaflet untuk peta -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <link rel="stylesheet" href="">
+
+    <style>
+        :root {
+            --primary-blue: #1f5f8b;
+            --secondary-blue: #3b82a0;
+            --green: #5b8c51;
+            --light-green: #eef5ea;
+            --light-blue: #eef6fa;
+            --dark: #20313b;
+            --text: #53636c;
+            --white: #fff;
+            --border: #e5ebee;
+            --bg: #f7f9f8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            background: var(--bg);
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 6%;
+            background: rgba(255,255,255,.96);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 18px rgba(0,0,0,.04);
+        }
+
+        .logo {
+            font-weight: 700;
+            color: var(--primary-blue);
+            letter-spacing: .3px;
+        }
+
+        .logo i { color: var(--green); margin-right: 8px; }
+
+        .nav-links {
+            display: flex;
+            gap: 26px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #53636c;
+            font-size: 13px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--secondary-blue);
+        }
+
+        .hamburger { display: none; }
+
+        .hero {
+            position: relative;
+            min-height: 520px;
+            padding: 38px 7% 55px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            color: white;
+            background:
+                linear-gradient(90deg, rgba(17,49,57,.84), rgba(17,49,57,.34)),
+                url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1800")
+                center/cover;
+        }
+
+        .breadcrumb-box {
+            position: absolute;
+            top: 28px;
+            left: 7%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            z-index: 2;
+        }
+
+        .breadcrumb-box a {
+            color: white;
+            text-decoration: none;
+            opacity: .9;
+        }
+
+        .breadcrumb-current { opacity: .65; }
+
+        .hero-content { max-width: 850px; }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 30px;
+            background: rgba(255,255,255,.16);
+            border: 1px solid rgba(255,255,255,.25);
+            font-size: 12px;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 6vw, 68px);
+            line-height: 1;
+            margin: 0 0 16px;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: 0;
+            line-height: 1.8;
+            color: rgba(255,255,255,.88);
+        }
+
+        .quick-facts {
+            position: absolute;
+            bottom: -45px;
+            left: 7%;
+            right: 7%;
+            z-index: 5;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(24,55,65,.12);
+            overflow: hidden;
+        }
+
+        .fact {
+            padding: 22px 24px;
+            border-right: 1px solid var(--border);
+        }
+
+        .fact:last-child { border-right: 0; }
+
+        .fact i {
+            color: var(--green);
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+        .fact small {
+            display: block;
+            color: #89969c;
+            font-size: 11px;
+            margin-bottom: 3px;
+        }
+
+        .fact strong { font-size: 14px; }
+
+        .section {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 95px 24px 20px;
+        }
+
+        .section + .section { padding-top: 55px; }
+
+        .section-title {
+            margin-bottom: 28px;
+        }
+
+        .section-title span {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+        }
+
+        .section-title h2 {
+            margin: 7px 0 8px;
+            font-size: 30px;
+        }
+
+        .section-title p {
+            margin: 0;
+            color: var(--text);
+            max-width: 700px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .intro {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 45px;
+            align-items: center;
+        }
+
+        .intro-text p {
+            color: var(--text);
+            line-height: 1.9;
+            font-size: 14px;
+        }
+
+        .highlight-box {
+            padding: 28px;
+            border-radius: 18px;
+            background: var(--light-green);
+            border-left: 4px solid var(--green);
+        }
+
+        .highlight-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 13px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 22px;
+        }
+
+        .data-card i {
+            color: var(--secondary-blue);
+            margin-bottom: 16px;
+        }
+
+        .data-card small {
+            display: block;
+            color: #89969c;
+            font-size: 11px;
+        }
+
+        .data-card strong {
+            display: block;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        .map-layout {
+            display: grid;
+            grid-template-columns: 1.4fr .6fr;
+            gap: 20px;
+        }
+
+        #map {
+            height: 390px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .location-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .location-row {
+            display: flex;
+            gap: 13px;
+            margin-bottom: 22px;
+        }
+
+        .location-row i {
+            color: var(--green);
+            margin-top: 3px;
+        }
+
+        .location-row small {
+            display: block;
+            color: #89969c;
+            font-size: 11px;
+        }
+
+        .location-row strong {
+            font-size: 13px;
+        }
+
+        .cards-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            padding: 25px;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(24,55,65,.08);
+        }
+
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: var(--light-green);
+            color: var(--green);
+            margin-bottom: 18px;
+        }
+
+        .info-card h3 {
+            margin: 0 0 9px;
+            font-size: 16px;
+        }
+
+        .info-card p {
+            color: var(--text);
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .commodity-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .commodity-table th,
+        .commodity-table td {
+            text-align: left;
+            padding: 17px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .commodity-table th {
+            background: #f1f6f4;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: #617178;
+        }
+
+        .commodity-table tr:last-child td { border-bottom: 0; }
+
+        .challenge {
+            background: #eef3f5;
+            border-radius: 20px;
+            padding: 35px;
+        }
+
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .challenge-item {
+            background: rgba(255,255,255,.72);
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .challenge-item i {
+            color: var(--secondary-blue);
+            margin-right: 8px;
+        }
+
+        .challenge-item p {
+            margin: 10px 0 0;
+            font-size: 12px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .program-box {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            align-items: center;
+            padding: 35px;
+            border-radius: 20px;
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .program-box h2 { margin-top: 0; }
+
+        .program-box p {
+            color: rgba(255,255,255,.8);
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 700px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: white;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            grid-auto-rows: 190px;
+            gap: 12px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            display: block;
+        }
+
+        .gallery .large {
+            grid-row: span 2;
+        }
+
+        .next-villages {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .village-link {
+            padding: 11px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .village-link.active {
+            background: var(--green);
+            color: white;
+            border-color: var(--green);
+        }
+
+        footer {
+            margin-top: 70px;
+            padding: 30px 7%;
+            background: #19333c;
+            color: rgba(255,255,255,.75);
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            font-size: 12px;
+        }
+
+
+        /* Tambahan: demografi, tabel, dan struktur organisasi */
+        .demography-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .panel h3 { margin: 0 0 16px; font-size: 16px; }
+        .stat-list { display: grid; gap: 15px; }
+        .stat-line { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; }
+        .stat-line span { color: var(--text); }
+        .stat-line strong { text-align: right; }
+        .data-note {
+            margin-top: 16px;
+            color: #7a898f;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+        .org-chart { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .org-node {
+            width: min(100%, 270px);
+            padding: 15px 18px;
+            text-align: center;
+            background: white;
+            border: 1px solid #dbe5e8;
+            border-radius: 12px;
+            box-shadow: 0 5px 16px rgba(24,55,65,.05);
+        }
+        .org-node.top {
+            color: white;
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        .org-node strong { display: block; font-size: 13px; margin-bottom: 5px; }
+        .org-node small { display: block; font-size: 11px; opacity: .82; }
+        .org-connector { width: 1px; height: 18px; background: #b9c9ce; margin-top: -18px; margin-bottom: -18px; }
+        .org-branches {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+            align-items: start;
+        }
+        .org-branches .org-node { width: 100%; height: 100%; }
+        .simple-table-wrap { overflow-x: auto; }
+        .simple-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .simple-table th, .simple-table td {
+            padding: 13px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+        .simple-table th { background: #f1f6f4; color: #617178; font-size: 11px; }
+        .simple-table tr:last-child td { border-bottom: 0; }
+        .placeholder { color: #8b989d; font-style: italic; }
+        .section-kicker { color: var(--green); font-size: 12px; font-weight: 700; }
+        @media (max-width: 700px) {
+            .demography-layout { grid-template-columns: 1fr; }
+            .org-branches { grid-template-columns: 1fr; }
+            .org-connector { display: none; }
+        }
+
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .hamburger { display: block; font-size: 20px; }
+
+            .hero { min-height: 570px; }
+
+            .quick-facts {
+                grid-template-columns: repeat(2, 1fr);
+                bottom: -90px;
+            }
+
+            .fact:nth-child(2) { border-right: 0; }
+            .fact:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+
+            .intro,
+            .map-layout { grid-template-columns: 1fr; }
+
+            .data-grid,
+            .cards-4 { grid-template-columns: repeat(2, 1fr); }
+
+            .gallery { grid-template-columns: 1fr 1fr; }
+            .gallery .large { grid-row: span 1; }
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding-left: 5%; padding-right: 5%; }
+            .breadcrumb-box { left: 5%; }
+            .quick-facts { left: 5%; right: 5%; }
+
+            .data-grid,
+            .cards-4,
+            .challenge-grid { grid-template-columns: 1fr; }
+
+            .gallery { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+
+            .program-box,
+            footer { flex-direction: column; }
+
+            .hero h1 { letter-spacing: -1px; }
+        }
+    </style>
 </head>
+
 <body>
 
-    <nav>
-        <div class="logo"><i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG</div>
+<nav>
+    <div class="logo">
+        <i class="fa-solid fa-seedling"></i> KT JELAI-NIBUNG
+    </div>
 
-        <div class="nav-links">
-            <a href="index.html">HOME</a>
-            <a href="tep2026.html">TEP 2026</a>
-            <a href="profil-desa.html" class="active" style="color: var(--secondary-blue);">PROFIL DESA</a> 
-            <a href="umkm.html">UMKM</a>
-            <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+    <div class="nav-links">
+        <a href="index.html">HOME</a>
+        <a href="tep2026.html">TEP 2026</a>
+        <a href="profil-desa.html" class="active">PROFIL DESA</a>
+        <a href="umkm.html">UMKM</a>
+        <a href="cerita-kawasan.html">CERITA KAWASAN</a>
+    </div>
+
+    <div class="hamburger">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero">
+
+    <div class="breadcrumb-box">
+        <a href="index.html"><i class="fa-solid fa-house"></i></a>
+        <span>/</span>
+        <a href="profil-desa.html">Profil Desa</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Pulau Nibung</span>
+    </div>
+
+    <div class="hero-content">
+        <div class="eyebrow">
+            <i class="fa-solid fa-location-dot"></i>
+            Kawasan Transmigrasi Jelai-Nibung
         </div>
 
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
+        <h1>PULAU NIBUNG</h1>
+
+        <p>
+            Mengenal wilayah, masyarakat, potensi, komoditas, dan kehidupan
+            Desa Pulau Nibung, Kecamatan Jelai, Kabupaten Sukamara.
+        </p>
+    </div>
+</section>
+
+
+<!-- QUICK FACTS -->
+<div class="quick-facts">
+
+    <div class="fact">
+        <i class="fa-solid fa-location-dot"></i>
+        <small>Kecamatan</small>
+        <strong>Jelai</strong>
+    </div>
+
+    <div class="fact">
+        <i class="fa-solid fa-map"></i>
+        <small>Kabupaten</small>
+        <strong>Sukamara</strong>
+    </div>
+
+    <div class="fact">
+        <i class="fa-solid fa-seedling"></i>
+        <small>Komoditas</small>
+        <strong>Jeruk & Pertanian</strong>
+    </div>
+
+    <div class="fact">
+        <i class="fa-solid fa-water"></i>
+        <small>Karakter Kawasan</small>
+        <strong>Pertanian & Perikanan</strong>
+    </div>
+
+</div>
+
+
+<!-- SEKILAS -->
+<section class="section">
+
+    <div class="section-title">
+        <span>01 — Mengenal Desa</span>
+        <h2>Sekilas Pulau Nibung</h2>
+    </div>
+
+    <div class="intro">
+
+        <div class="intro-text">
+            <p>
+                Desa Pulau Nibung merupakan salah satu desa yang berada di
+                Kecamatan Jelai, Kabupaten Sukamara, Kalimantan Tengah, dan
+                menjadi bagian dari kawasan transmigrasi Jelai-Nibung.
+            </p>
+
+            <p>
+                Berdasarkan informasi awal yang perlu dikonfirmasi melalui observasi dan sumber desa, kehidupan masyarakat di wilayah ini berkaitan erat dengan
+                aktivitas pertanian, perikanan, serta pemanfaatan potensi
+                sumber daya lokal. Hal tersebut menjadi bagian penting dalam
+                melihat perkembangan dan karakter kawasan.
+            </p>
         </div>
-    </nav>
 
-    <section class="detail-hero">
-        <!-- KOTAK NAVIGASI BREADCRUMB BERIKON -->
-        <div class="breadcrumb-box">
-            <a href="index.html" class="breadcrumb-item" title="Kembali ke Beranda">
-                <i class="fa-solid fa-house"></i>
-            </a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="profil-desa.html" class="breadcrumb-item">Profil Desa</a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-current" id="breadcrumbNama">...</span>
+        <div class="highlight-box">
+            <strong><i class="fa-solid fa-circle-info"></i> Identitas Kawasan</strong>
+            <p>
+                Halaman ini dapat digunakan sebagai gambaran singkat mengenai
+                kondisi dan potensi Desa Pulau Nibung dalam konteks kawasan
+                transmigrasi Jelai-Nibung.
+            </p>
         </div>
 
-        <h1>DESA PULAU NIBUNG</h1>
-        <div class="hero-img-box"></div>
-        <p class="lokasi-text"><i class="fa-solid fa-map-location-dot"></i> Lokasi: Kecamatan Jelai, Kabupaten Sukamara</p>
-    </section>
+    </div>
+</section>
 
-    <section class="content-section">
-        <p>Desa Pulau Nibung adalah salah satu desa yang berlokasi di kecamatan Jelai kabupaten Sukamara yang mempunyai beberapa potensi dan UMKM yang mempunyai nilai jual, contohnya adalah kerupuk basah yang terbuat dari olahan ikan gabus hasil tangkapan sungai.</p>
-        
-        <h2>POTENSI</h2>
-        <p>Desa Pulau Nibung memiliki tanah yang subur dan akses sungai yang melimpah. Potensi utama desa ini terbagi pada sektor perikanan sungai (seperti ikan gabus dan udang galah) serta sektor pertanian komoditas jeruk yang sangat melimpah.</p>
-    </section>
 
-    <section class="dokumentasi-section">
-        <h2 class="dokumentasi-title">Dokumentasi</h2>
-        <div class="slider-wrapper">
-            <div class="slide-track">
-                <!-- 5 Asli -->
-                <div class="slide"><img src="https://images.unsplash.com/photo-1593113563332-e147ce106408?w=500" alt="Dok 1"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1558904541-efa843a96f0a?w=500" alt="Dok 2"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1629272365267-331da2d0013b?w=500" alt="Dok 3"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1506526611497-cb13ba408e09?w=500" alt="Dok 4"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1577984852928-87424683058a?w=500" alt="Dok 5"></div>
-                <!-- 5 Duplikat -->
-                <div class="slide"><img src="https://images.unsplash.com/photo-1593113563332-e147ce106408?w=500" alt="Dok 1"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1558904541-efa843a96f0a?w=500" alt="Dok 2"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1629272365267-331da2d0013b?w=500" alt="Dok 3"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1506526611497-cb13ba408e09?w=500" alt="Dok 4"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1577984852928-87424683058a?w=500" alt="Dok 5"></div>
+<!-- DATA DESA -->
+<section class="section">
+
+    <div class="section-title">
+        <span>02 — Data Dasar</span>
+        <h2>Data Desa</h2>
+        <p>Isi bagian ini dengan data resmi yang diperoleh dari desa atau sumber lapangan.</p>
+    </div>
+
+    <div class="data-grid">
+
+        <div class="data-card">
+            <i class="fa-solid fa-people-group"></i>
+            <small>Jumlah Penduduk</small>
+            <strong>— jiwa</strong>
+        </div>
+
+        <div class="data-card">
+            <i class="fa-solid fa-house-user"></i>
+            <small>Jumlah KK</small>
+            <strong>— KK</strong>
+        </div>
+
+        <div class="data-card">
+            <i class="fa-solid fa-ruler-combined"></i>
+            <small>Luas Wilayah</small>
+            <strong>— km²</strong>
+        </div>
+
+        <div class="data-card">
+            <i class="fa-solid fa-location-crosshairs"></i>
+            <small>Koordinat</small>
+            <strong class="placeholder">Verifikasi koordinat</strong>
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- DEMOGRAFI -->
+<section class="section">
+    <div class="section-title">
+        <span>04 — Demografi</span>
+        <h2>Gambaran Penduduk</h2>
+        <p>Ringkasan kondisi penduduk berdasarkan data resmi atau hasil pendataan yang sudah diverifikasi. Cantumkan tahun data agar informasi tidak menyesatkan.</p>
+    </div>
+
+    <div class="demography-layout">
+        <div class="panel">
+            <h3>Komposisi Penduduk</h3>
+            <div class="stat-list">
+                <div class="stat-line"><span>Total penduduk</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Laki-laki</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Perempuan</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Kepala keluarga (KK)</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Jumlah dusun / RT / RW</span><strong class="placeholder">Belum diisi</strong></div>
+            </div>
+            <p class="data-note">Tahun data: belum diisi. Jangan mengisi angka perkiraan sebagai data resmi.</p>
+        </div>
+
+        <div class="panel">
+            <h3>Karakteristik Penduduk</h3>
+            <div class="stat-list">
+                <div class="stat-line"><span>Kelompok usia</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Pendidikan terakhir</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Mata pencaharian utama</span><strong class="placeholder">Belum diisi</strong></div>
+                <div class="stat-line"><span>Jumlah penduduk usia produktif</span><strong class="placeholder">Belum diisi</strong></div>
+            </div>
+            <p class="data-note">Data karakteristik sebaiknya berupa rekap agregat, bukan daftar data pribadi penduduk.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STRUKTUR ORGANISASI -->
+<section class="section">
+    <div class="section-title">
+        <span>05 — Pemerintahan Desa</span>
+        <h2>Struktur Organisasi Pemerintahan</h2>
+        <p>Gunakan struktur resmi terbaru dari pemerintah desa. Jabatan di bawah ini merupakan tempat pengisian, bukan pernyataan bahwa jabatan tersebut pasti ada di desa.</p>
+    </div>
+
+    <div class="panel">
+        <div class="org-chart">
+            <div class="org-node top">
+                <strong>Kepala Desa</strong>
+                <small class="placeholder">Nama pejabat belum diisi</small>
+            </div>
+            <div class="org-connector"></div>
+            <div class="org-node">
+                <strong>Sekretaris Desa</strong>
+                <small class="placeholder">Nama pejabat belum diisi</small>
+            </div>
+            <div class="org-connector"></div>
+            <div class="org-branches">
+                <div class="org-node">
+                    <strong>Kepala Urusan (Kaur)</strong>
+                    <small class="placeholder">Nama dan bidang sesuai struktur resmi</small>
+                </div>
+                <div class="org-node">
+                    <strong>Kepala Seksi (Kasi)</strong>
+                    <small class="placeholder">Nama dan bidang sesuai struktur resmi</small>
+                </div>
+                <div class="org-node">
+                    <strong>Kepala Dusun / Wilayah</strong>
+                    <small class="placeholder">Nama dan wilayah sesuai struktur resmi</small>
+                </div>
             </div>
         </div>
-    </section>
+        <p class="data-note">Saran: tampilkan foto pejabat hanya jika tersedia dan penggunaannya telah mendapat izin. Jika struktur desa memiliki lebih banyak jabatan atau wilayah, bagan harus mengikuti dokumen resmi desa.</p>
+    </div>
+</section>
 
-    <footer>
-        <div><i class="fa-regular fa-copyright"></i> TIM EKSPEDISI PATRIOT 2026</div>
-        <div><i class="fa-brands fa-instagram"></i> @patriotjelainibung</div>
-    </footer>
+<!-- FASILITAS DAN LAYANAN -->
+<section class="section">
+    <div class="section-title">
+        <span>06 — Fasilitas Desa</span>
+        <h2>Fasilitas dan Layanan</h2>
+        <p>Catat fasilitas yang benar-benar tersedia, lokasi, kondisi, dan keterangan aksesnya berdasarkan observasi.</p>
+    </div>
+    <div class="simple-table-wrap">
+        <table class="simple-table">
+            <thead><tr><th>Fasilitas</th><th>Jumlah</th><th>Kondisi</th><th>Keterangan / Lokasi</th></tr></thead>
+            <tbody>
+                <tr><td>Kantor desa</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Pendidikan</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Kesehatan</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Ibadah</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+                <tr><td>Jalan / jembatan / transportasi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td><td class="placeholder">Belum diisi</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 
-    <!-- JAVASCRIPT -->
-    <script src="js/script.js?v=2"></script>
-    
+
+<!-- PETA -->
+<section class="section">
+
+    <div class="section-title">
+        <span>03 — Lokasi</span>
+        <h2>Lokasi & Akses</h2>
+        <p>
+            Posisi desa berdasarkan koordinat yang perlu diverifikasi sebelum halaman dipublikasikan.
+        </p>
+    </div>
+
+    <div class="map-layout">
+
+        <div id="map"></div>
+
+        <div class="location-card">
+
+            <div class="location-row">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <small>Desa</small>
+                    <strong>Pulau Nibung</strong>
+                </div>
+            </div>
+
+            <div class="location-row">
+                <i class="fa-solid fa-building"></i>
+                <div>
+                    <small>Kecamatan</small>
+                    <strong>Jelai</strong>
+                </div>
+            </div>
+
+            <div class="location-row">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <div>
+                    <small>Kabupaten</small>
+                    <strong>Sukamara</strong>
+                </div>
+            </div>
+
+            <div class="location-row">
+                <i class="fa-solid fa-road"></i>
+                <div>
+                    <small>Akses</small>
+                    <strong>Isi berdasarkan hasil observasi lapangan</strong>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- POTENSI -->
+<section class="section">
+
+    <div class="section-title">
+        <span>07 — Potensi Lokal</span>
+        <h2>Potensi Desa</h2>
+        <p>
+            Potensi yang dapat dikembangkan dari sumber daya lokal dan aktivitas masyarakat.
+        </p>
+    </div>
+
+    <div class="cards-4">
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-lemon"></i></div>
+            <h3>Jeruk</h3>
+            <p>
+                Salah satu komoditas pertanian yang dapat menjadi bagian dari
+                pengembangan ekonomi lokal.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-fish"></i></div>
+            <h3>Perikanan Sungai</h3>
+            <p>
+                Potensi ikan sungai seperti ikan gabus serta hasil perikanan
+                lainnya.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-seedling"></i></div>
+            <h3>Pertanian</h3>
+            <p>
+                Pemanfaatan lahan untuk berbagai komoditas dan pengembangan
+                hasil pertanian.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-bowl-food"></i></div>
+            <h3>Produk Olahan</h3>
+            <p>
+                Hasil pertanian dan perikanan dapat dikembangkan menjadi produk
+                bernilai tambah.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- DOKUMENTASI -->
+<section class="section">
+
+    <div class="section-title">
+        <span>08 — Dokumentasi</span>
+        <h2>Potret Pulau Nibung</h2>
+        <p>
+            Sebaiknya gunakan foto asli hasil dokumentasi lapangan agar identitas
+            desa lebih terasa.
+        </p>
+    </div>
+
+    <div class="gallery">
+
+        <img class="large"
+             src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900"
+             alt="Pertanian">
+
+        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=700"
+             alt="Lahan pertanian">
+
+        <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=700"
+             alt="Lingkungan desa">
+
+        <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?w=700"
+             alt="Lingkungan kawasan">
+
+        <img src="https://images.unsplash.com/photo-1472141521881-95d0e87e2e39?w=700"
+             alt="Aktivitas masyarakat">
+
+    </div>
+
+</section>
+
+
+<footer>
+    <div>
+        <i class="fa-regular fa-copyright"></i>
+        TIM EKSPEDISI PATRIOT 2026
+    </div>
+
+    <div>
+        <i class="fa-brands fa-instagram"></i>
+        @patriotjelainibung
+    </div>
+</footer>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Peta Pulau Nibung
+    const koordinatDesa = [-2.75, 111.25]; // GANTI dengan koordinat desa yang sudah diverifikasi
+    const map = L.map('map').setView(koordinatDesa, 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const marker = L.marker(koordinatDesa).addTo(map);
+
+    marker.bindPopup(`
+        <strong>Desa Pulau Nibung</strong><br>
+        Kecamatan Jelai<br>
+        Kabupaten Sukamara
+    `).openPopup();
+</script>
+
+<script src="js/script.js?v=2"></script>
+
 </body>
 </html>
