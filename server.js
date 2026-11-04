@@ -121,7 +121,7 @@ const umkmSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const UMKM = mongoose.model("UMKM", umkmSchema);
+const UMKM = mongoose.models.UMKM || mongoose.model("UMKM", umkmSchema);
 
 
 // ==========================================
@@ -156,7 +156,7 @@ const ceritaSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Cerita = mongoose.model("Cerita", ceritaSchema);
+const Cerita = mongoose.models.Cerita || mongoose.model("Cerita", ceritaSchema);
 
 
 // ==========================================
@@ -205,7 +205,7 @@ const desaSchema = new mongoose.Schema({
     collection: "desas"
 });
 
-const Desa = mongoose.model("Desa", desaSchema);
+const Desa = mongoose.models.Desa || mongoose.model("Desa", desaSchema);
 
 
 // ==========================================
@@ -318,10 +318,7 @@ const desaProfileSchema = new mongoose.Schema({
     collection: "desa_profiles"
 });
 
-const DesaProfile = mongoose.model(
-    "DesaProfile",
-    desaProfileSchema
-);
+const DesaProfile = mongoose.models.DesaProfile || mongoose.model("DesaProfile", desaProfileSchema);
 
 // ==========================================
 // MODEL STRUKTUR ORGANISASI DESA
@@ -380,10 +377,7 @@ const desaOrganigramSchema = new mongoose.Schema({
     collection: "desa_organigrams"
 });
 
-const DesaOrganigram = mongoose.model(
-    "DesaOrganigram",
-    desaOrganigramSchema
-);
+const DesaOrganigram = mongoose.models.DesaOrganigram || mongoose.model("DesaOrganigram", desaOrganigramSchema);
 // ==========================================
 // 10. MODEL DEMOGRAFI DESA
 // ==========================================
@@ -475,10 +469,7 @@ desaDemografiSchema.index(
     { unique: true }
 );
 
-const DesaDemografi = mongoose.model(
-    "DesaDemografi",
-    desaDemografiSchema
-);
+const DesaDemografi = mongoose.models.DesaDemografi || mongoose.model("DesaDemografi", desaDemografiSchema);
 
 
 // ==========================================
@@ -511,10 +502,7 @@ const desaGaleriSchema = new mongoose.Schema({
     collection: "desa_galleries"
 });
 
-const DesaGaleri = mongoose.model(
-    "DesaGaleri",
-    desaGaleriSchema
-);
+const DesaGaleri = mongoose.models.DesaGaleri || mongoose.model("DesaGaleri", desaGaleriSchema);
 
 
 // ==========================================
