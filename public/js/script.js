@@ -31,35 +31,65 @@ function scrollCarousel(direction) {
 }
 
 // ==========================================
-// 3. PETA LEAFLET DI HALAMAN PROFIL DESA
+// 3. PETA LEAFLET — HALAMAN PROFIL DESA
 // ==========================================
-// Bagian ini menampilkan peta interaktif (Leaflet.js) yang memuat koordinat
-// 5 desa utama di Kawasan Transmigrasi Jelai Nibung beserta pin penandanya.
-document.addEventListener("DOMContentLoaded", function() {
-    const mapElement = document.getElementById('map');
-    
-    if (mapElement) {
-        var map = L.map('map').setView([-2.9912, 110.7077], 12);
+document.addEventListener("DOMContentLoaded", function () {
+    const mapElement = document.getElementById("map");
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-            subdomains: 'abcd',
+    // Jangan jalankan peta 5 desa pada halaman Detail Desa.
+    if (document.body.classList.contains("detail-desa-page")) return;
+
+    // Pastikan elemen peta dan Leaflet tersedia.
+    if (!mapElement || typeof L === "undefined") return;
+
+    // Cegah peta dibuat lebih dari satu kali.
+    if (mapElement.dataset.initialized === "true") return;
+    mapElement.dataset.initialized = "true";
+
+    const map = L.map(mapElement).setView([-2.9912, 110.7077], 12);
+
+    L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        {
+            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+            subdomains: "abcd",
             maxZoom: 20
-        }).addTo(map);
+        }
+    ).addTo(map);
 
-        var lokasiDesa = [
-            { nama: "Desa Pulau Nibung", lat: -2.8970700201566784, lng: 110.85125012346921 }, 
-            { nama: "Desa Sungai Baru", lat: -2.9902012839775276, lng: 110.85424584969269 },
-            { nama: "Desa Sungai Bundung", lat: -2.989670241182833, lng: 110.88306488952134 },
-            { nama: "Desa Sungai Raja", lat: -3.04709225914006, lng: 110.94008332722463 },
-            { nama: "Desa Sungai Damar", lat: -3.0548757610171604, lng: 111.01853520736358 }
-        ];
+    const lokasiDesa = [
+        {
+            nama: "Desa Pulau Nibung",
+            lat: -2.8970700201566784,
+            lng: 110.85125012346921
+        },
+        {
+            nama: "Desa Sungai Baru",
+            lat: -2.9902012839775276,
+            lng: 110.85424584969269
+        },
+        {
+            nama: "Desa Sungai Bundung",
+            lat: -2.989670241182833,
+            lng: 110.88306488952134
+        },
+        {
+            nama: "Desa Sungai Raja",
+            lat: -3.04709225914006,
+            lng: 110.94008332722463
+        },
+        {
+            nama: "Desa Sungai Damar",
+            lat: -3.0548757610171604,
+            lng: 111.01853520736358
+        }
+    ];
 
-        lokasiDesa.forEach(function(desa) {
-            var marker = L.marker([desa.lat, desa.lng]).addTo(map);
-            marker.bindPopup("<b>" + desa.nama + "</b><br>Kecamatan Jelai").openPopup();
-        });
-    }
+    lokasiDesa.forEach(function (desa) {
+        L.marker([desa.lat, desa.lng])
+            .addTo(map)
+            .bindPopup(`<b>${desa.nama}</b><br>Kecamatan Jelai`);
+    });
 });
 
 // ==========================================
@@ -165,11 +195,33 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Event Logout Global
-    if (document.getElementById("floatLogout")) {
-        document.getElementById("floatLogout").addEventListener("click", () => {
-            localStorage.removeItem("isAdmin");
-            alert("Berhasil logout!");
-            window.location.reload();
+    const tombolLogout = document.getElementById("floatLogout");
+
+    if (tombolLogout) {
+        tombolLogout.addEventListener("click", async () => {
+            try {
+                const response = await fetch("/api/logout", {
+                    method: "POST",
+                    credentials: "same-origin",
+                    cache: "no-store"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Gagal mengakhiri sesi admin.");
+                }
+
+                // Hapus status admin di browser
+                localStorage.removeItem("isAdmin");
+
+                alert("Berhasil logout!");
+
+                // Muat ulang halaman agar seluruh tombol CRUD hilang
+                window.location.reload();
+
+            } catch (error) {
+                console.error("Logout error:", error);
+                alert("Logout gagal. Silakan coba kembali.");
+            }
         });
     }
 });
@@ -706,5 +758,1263 @@ document.addEventListener("DOMContentLoaded", function () {
                 closeModal();
             }
         });
+    }
+});
+
+
+// ==========================================
+// 9. DETAIL DESA — IDENTITAS, PROFIL,
+// DATA DESA, DEMOGRAFI, DAN DOKUMENTASI
+// ==========================================
+document.addEventListener("DOMContentLoaded", async function () {
+    if (!document.body.classList.contains("detail-desa-page")) return;
+
+    const slug = new URLSearchParams(location.search).get("desa");
+    if (!slug) return;
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => root.querySelectorAll(selector);
+
+    let desa = {};
+    let profil = {};
+    let konten = {
+        organigram: {
+            anggota: []
+        }
+    };
+
+    let demografi = {};
+    let daftarDemografi = [];
+    let tahunDemografiAktif = null;
+    let galeri = [];
+    let adminAktif = false;
+    let map = null;
+
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#039;"
+    })[c]);
+
+    const angka = value =>
+        value == null || value === ""
+            ? "Belum diisi"
+            : Number(value).toLocaleString("id-ID");
+
+    async function api(url, options = {}) {
+        const response = await fetch(url, options);
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(result.pesan || "Gagal memproses data.");
+        }
+
+        return result;
+    }
+
+    // CEK LOGIN ADMIN DARI SERVER
+    try {
+        const response = await fetch("/api/admin/status", {
+            method: "GET",
+            credentials: "same-origin",
+            cache: "no-store"
+        });
+
+        adminAktif = response.ok;
+
+    } catch (error) {
+        adminAktif = false;
+    }
+
+    // MODAL FORM ADMIN
+    const modal = document.createElement("div");
+    modal.id = "modal-kelola-desa";
+    modal.innerHTML = `
+        <div class="kelola-modal-overlay">
+            <div class="kelola-modal-box">
+                <button type="button" class="kelola-modal-close">&times;</button>
+                <h2 id="kelola-modal-title"></h2>
+                <form id="kelola-desa-form">
+                    <div id="kelola-form-fields"></div>
+                    <div class="kelola-form-actions">
+                        <button type="button" id="kelola-batal">Batal</button>
+                        <button type="submit" id="kelola-simpan">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    const form = $("#kelola-desa-form");
+    const fields = $("#kelola-form-fields");
+
+    function tutupModal() {
+        modal.style.display = "none";
+        form.reset();
+    }
+
+    $(".kelola-modal-close").onclick = tutupModal;
+    $("#kelola-batal").onclick = tutupModal;
+
+        function bukaForm(judul, daftarField, callback) {
+        // Mengatur judul modal
+        $("#kelola-modal-title").textContent = judul;
+
+        // Mengosongkan field sebelumnya
+        fields.innerHTML = "";
+
+        // Membuat setiap field berdasarkan konfigurasi
+        daftarField.forEach(field => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "kelola-field";
+
+            const label = document.createElement("label");
+            label.textContent = field.label;
+
+            let input;
+
+            // Membuat textarea
+            if (field.type === "textarea") {
+                input = document.createElement("textarea");
+
+            // Membuat dropdown select
+            } else if (field.type === "select") {
+                input = document.createElement("select");
+
+                (field.options || []).forEach(option => {
+                    const pilihan = document.createElement("option");
+
+                    pilihan.value = option.value;
+                    pilihan.textContent = option.label;
+
+                    input.appendChild(pilihan);
+                });
+
+            // Membuat input biasa
+            } else {
+                input = document.createElement("input");
+                input.type = field.type || "text";
+            }
+
+            // Pengaturan umum setiap field
+            input.name = field.name;
+            input.value = field.value ?? "";
+            input.required = Boolean(field.required);
+            input.placeholder = field.placeholder || "";
+            input.readOnly = Boolean(field.readOnly);
+
+            // Pengaturan khusus input angka
+            if (field.type === "number") {
+                input.step = field.step || "any";
+            }
+
+            // Pengaturan khusus textarea
+            if (field.type === "textarea") {
+                input.rows = field.rows || 4;
+            }
+
+            // Pengaturan khusus input file
+            if (field.type === "file") {
+                input.accept = "image/*";
+            }
+
+            // Memasukkan label dan input ke dalam wrapper
+            wrapper.append(label, input);
+            fields.appendChild(wrapper);
+        });
+
+        // Menampilkan modal setelah seluruh field dibuat
+        modal.style.display = "flex";
+
+        // Mengatur proses ketika form disubmit
+        form.onsubmit = async event => {
+            event.preventDefault();
+
+            const button = $("#kelola-simpan");
+
+            button.disabled = true;
+            button.textContent = "Menyimpan...";
+
+            try {
+                // Mengirim seluruh data form ke callback
+                await callback(new FormData(form));
+
+                // Menutup modal setelah berhasil
+                tutupModal();
+
+                // Memuat ulang konten desa
+                await muatKonten();
+
+            } catch (error) {
+                alert(error.message);
+
+            } finally {
+                // Mengembalikan tombol ke kondisi semula
+                button.disabled = false;
+                button.textContent = "Simpan";
+            }
+        };
+    }
+
+    // MEMUAT DATA DARI DATABASE
+    async function muatKonten() {
+        const result = await api(
+            `/api/desa/${encodeURIComponent(slug)}/konten`
+        );
+
+        desa = result.data.desa || {};
+        profil = result.data.profil || {};
+        galeri = result.data.galeri || [];
+
+        konten.organigram = result.data.organigram || {
+            anggota: []
+        };
+
+        // Ambil seluruh riwayat demografi
+        const riwayat = await api(
+            `/api/desa/${desa._id}/demografi`
+        );
+
+        daftarDemografi = riwayat.data || [];
+
+        // Pertahankan tahun yang sedang dipilih jika masih tersedia
+        const tahunTersedia = daftarDemografi.some(
+            item => item.tahun === tahunDemografiAktif
+        );
+
+        if (!tahunTersedia) {
+            tahunDemografiAktif = daftarDemografi.length
+                ? daftarDemografi[0].tahun
+                : null;
+        }
+
+        demografi = daftarDemografi.find(
+            item => item.tahun === tahunDemografiAktif
+        ) || {};
+
+        tampilkanIdentitas();
+        tampilkanProfil();
+        tampilkanDataDesa();
+        tampilkanDemografi();
+        tampilkanGaleri();
+        tampilkanPeta();
+        tampilkanOrganisasi();
+        tampilkanTombolAdmin();
+    }
+
+    // IDENTITAS DESA
+    function tampilkanIdentitas() {
+        const nama = desa.namaDesa || "Nama Desa";
+
+        if ($("#desa-nama")) $("#desa-nama").textContent = nama;
+        if ($("#breadcrumb-desa")) $("#breadcrumb-desa").textContent = nama;
+
+        document.title = `${nama} | KT Jelai-Nibung`;
+
+        $$('[data-field="ringkasanHero"]').forEach(el => {
+            el.textContent = profil.ringkasan || "Deskripsi singkat belum diisi.";
+        });
+        $$('[data-field="komoditasUtama"]').forEach(el => {
+            el.textContent = profil.komoditasUtama || "Belum diisi";
+        });
+        $$('[data-field="karakterKawasan"]').forEach(el => {
+            el.textContent = profil.karakterKawasan || "Belum diisi";
+        });
+        $$('[data-field="namaDesa"]').forEach(el => el.textContent = nama);
+        $$('[data-field="kecamatan"]').forEach(el => el.textContent = desa.kecamatan || "—");
+        $$('[data-field="kabupaten"]').forEach(el => el.textContent = desa.kabupaten || "—");
+    }
+
+    // SEKILAS DESA
+    function tampilkanProfil() {
+        const el = $("#desa-deskripsi");
+
+        if (el) {
+            el.textContent = profil.deskripsi || "Deskripsi desa belum diisi.";
+        }
+    }
+
+    // DATA DESA
+    function tampilkanDataDesa() {
+        const koordinat = profil.koordinat || {};
+
+        const data = {
+            jumlahPenduduk: angka(profil.jumlahPenduduk),
+            jumlahKK: angka(profil.jumlahKK),
+            luasWilayah: profil.luasWilayah || "Belum diisi",
+            koordinat: koordinat.latitude != null && koordinat.longitude != null
+                ? `${koordinat.latitude}, ${koordinat.longitude}`
+                : "Belum diisi",
+            akses: profil.akses || "Belum diisi"
+        };
+
+        Object.entries(data).forEach(([key, value]) => {
+            $$(`[data-field="${key}"]`).forEach(el => {
+                el.textContent = value;
+            });
+        });
+    }
+
+    // FORM PROFIL DAN DATA DESA
+    // ==========================================
+    // FORM CRUD PROFIL DESA
+    // ==========================================
+    function formProfil() {
+        const koordinat = profil.koordinat || {};
+
+        bukaForm("Kelola Profil Desa", [
+            {
+                label: "Deskripsi Singkat Desa",
+                name: "ringkasan",
+                type: "textarea",
+                rows: 3,
+                value: profil.ringkasan || ""
+            },
+            {
+                label: "Sekilas Desa",
+                name: "deskripsi",
+                type: "textarea",
+                rows: 7,
+                value: profil.deskripsi || ""
+            },
+            {
+                label: "Komoditas Utama",
+                name: "komoditasUtama",
+                value: profil.komoditasUtama || ""
+            },
+            {
+                label: "Karakter Kawasan",
+                name: "karakterKawasan",
+                type: "textarea",
+                rows: 3,
+                value: profil.karakterKawasan || ""
+            },
+            {
+                label: "Jumlah Penduduk",
+                name: "jumlahPenduduk",
+                type: "number",
+                value: profil.jumlahPenduduk ?? ""
+            },
+            {
+                label: "Jumlah Kepala Keluarga (KK)",
+                name: "jumlahKK",
+                type: "number",
+                value: profil.jumlahKK ?? ""
+            },
+            {
+                label: "Luas Wilayah",
+                name: "luasWilayah",
+                value: profil.luasWilayah || ""
+            },
+            {
+                label: "Latitude",
+                name: "latitude",
+                type: "number",
+                step: "any",
+                value: koordinat.latitude ?? ""
+            },
+            {
+                label: "Longitude",
+                name: "longitude",
+                type: "number",
+                step: "any",
+                value: koordinat.longitude ?? ""
+            },
+            {
+                label: "Akses Menuju Desa",
+                name: "akses",
+                type: "textarea",
+                rows: 4,
+                value: profil.akses || ""
+            }
+        ], async data => {
+
+            const latitude = data.get("latitude").trim();
+            const longitude = data.get("longitude").trim();
+
+            const payload = {
+                ringkasan: data.get("ringkasan"),
+                deskripsi: data.get("deskripsi"),
+                komoditasUtama: data.get("komoditasUtama"),
+                karakterKawasan: data.get("karakterKawasan"),
+                jumlahPenduduk: Number(data.get("jumlahPenduduk") || 0),
+                jumlahKK: Number(data.get("jumlahKK") || 0),
+                luasWilayah: data.get("luasWilayah"),
+                latitude: latitude === "" ? null : Number(latitude),
+                longitude: longitude === "" ? null : Number(longitude),
+                akses: data.get("akses")
+            };
+
+            if (
+                (latitude !== "" && !Number.isFinite(payload.latitude)) ||
+                (longitude !== "" && !Number.isFinite(payload.longitude))
+            ) {
+                throw new Error("Latitude dan longitude harus berupa angka desimal yang valid.");
+            }
+
+            await api(`/api/desa/${desa._id}/profil`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            alert("Profil desa berhasil disimpan!");
+        });
+    }
+
+    // DEMOGRAFI
+    function formatKategori(items) {
+        return (Array.isArray(items) ? items : [])
+            .map(item => `${item.kategori}: ${item.jumlah}`)
+            .join("\n");
+    }
+
+    function parseKategori(value) {
+        return String(value || "").split("\n")
+            .map(row => row.trim())
+            .filter(Boolean)
+            .map(row => {
+                const index = row.lastIndexOf(":");
+
+                if (index < 1) {
+                    throw new Error("Gunakan format Kategori: Jumlah pada setiap baris.");
+                }
+
+                return {
+                    kategori: row.slice(0, index).trim(),
+                    jumlah: Number(row.slice(index + 1).trim())
+                };
+            });
+    }
+
+    function tampilkanDemografi() {
+        const layout = $(".demography-layout");
+        if (!layout) return;
+
+        const panel1 = $(".panel:first-child", layout);
+        const panel2 = $(".panel:nth-child(2)", layout);
+
+        // ======================================
+        // PILIHAN TAHUN DEMOGRAFI
+        // ======================================
+        let toolbar = $("#demografi-toolbar");
+
+        if (!toolbar) {
+            toolbar = document.createElement("div");
+            toolbar.id = "demografi-toolbar";
+            toolbar.className = "demografi-toolbar";
+            layout.parentNode.insertBefore(toolbar, layout);
+        }
+
+        toolbar.innerHTML = `
+            <div class="demografi-year-select">
+                <label for="pilih-tahun-demografi">
+                    Tahun Data
+                </label>
+
+                <select id="pilih-tahun-demografi">
+                    ${
+                        daftarDemografi.length
+                            ? daftarDemografi.map(item => `
+                                <option value="${item.tahun}"
+                                    ${item.tahun === tahunDemografiAktif ? "selected" : ""}>
+                                    ${item.tahun}
+                                </option>
+                            `).join("")
+                            : `<option value="">Belum ada data</option>`
+                    }
+                </select>
+            </div>
+
+            ${
+                adminAktif
+                    ? `
+                        <div class="demografi-admin-actions">
+                            <button type="button" id="btn-tambah-demografi">
+                                <i class="fa-solid fa-plus"></i> Tambah Tahun
+                            </button>
+
+                            <button type="button" id="btn-edit-demografi"
+                                ${!daftarDemografi.length ? "disabled" : ""}>
+                                <i class="fa-solid fa-pen"></i> Edit
+                            </button>
+
+                            <button type="button" id="btn-hapus-demografi"
+                                ${!daftarDemografi.length ? "disabled" : ""}>
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    `
+                    : ""
+            }
+        `;
+
+        // Ganti tahun yang ditampilkan
+        $("#pilih-tahun-demografi").addEventListener("change", function () {
+            tahunDemografiAktif = this.value
+                ? Number(this.value)
+                : null;
+
+            demografi = daftarDemografi.find(
+                item => item.tahun === tahunDemografiAktif
+            ) || {};
+
+            tampilkanDemografi();
+        });
+
+        // Tombol admin
+        if (adminAktif) {
+            $("#btn-tambah-demografi").onclick = () => {
+                formDemografi("tambah");
+            };
+
+            $("#btn-edit-demografi").onclick = () => {
+                formDemografi("edit");
+            };
+
+            $("#btn-hapus-demografi").onclick = hapusDemografi;
+        }
+
+        // ======================================
+        // DATA KOMPOSISI PENDUDUK
+        // ======================================
+        if (panel1) {
+            const rows = panel1.querySelectorAll(".stat-line");
+
+            const values = [
+                angka(demografi.jumlahPenduduk),
+                angka(demografi.lakiLaki),
+                angka(demografi.perempuan),
+                angka(demografi.jumlahKK),
+                demografi.jumlahDusunRT || "Belum diisi"
+            ];
+
+            rows.forEach((row, index) => {
+                const strong = $("strong", row);
+
+                if (strong && values[index] !== undefined) {
+                    strong.textContent = values[index];
+                }
+            });
+
+            const note = $(".data-note", panel1);
+
+            if (note) {
+                note.textContent = `Tahun data: ${demografi.tahun || "Belum diisi"}`;
+            }
+        }
+
+        // ======================================
+        // KARAKTERISTIK PENDUDUK
+        // ======================================
+        if (panel2) {
+            const list = $(".stat-list", panel2) || panel2;
+
+            const items = [
+                ["Kelompok usia", demografi.kelompokUsia],
+                ["Pendidikan terakhir", demografi.pendidikan],
+                ["Mata pencaharian utama", demografi.pekerjaan]
+            ];
+
+            list.innerHTML = items.map(([label, values]) => `
+                <div class="stat-line">
+                    <span>${label}</span>
+                    <strong>
+                        ${
+                            Array.isArray(values) && values.length
+                                ? values.map(item =>
+                                    `${esc(item.kategori)} (${angka(item.jumlah)})`
+                                ).join(", ")
+                                : "Belum diisi"
+                        }
+                    </strong>
+                </div>
+            `).join("") + `
+                <div class="stat-line">
+                    <span>Jumlah penduduk usia produktif</span>
+                    <strong>${angka(demografi.usiaProduktif)}</strong>
+                </div>
+            `;
+        }
+    }
+
+    function formDemografi(mode = "tambah") {
+    const editMode = mode === "edit";
+    const d = editMode ? demografi : {};
+
+    bukaForm(
+            editMode ? "Edit Data Demografi" : "Tambah Data Demografi",
+            [
+                {
+                    label: "Tahun Data",
+                    name: "tahun",
+                    type: "number",
+                    value: d.tahun || new Date().getFullYear(),
+                    required: true,
+                    readOnly: editMode
+                },
+                {
+                    label: "Total Penduduk",
+                    name: "jumlahPenduduk",
+                    type: "number",
+                    value: d.jumlahPenduduk ?? ""
+                },
+                {
+                    label: "Laki-laki",
+                    name: "lakiLaki",
+                    type: "number",
+                    value: d.lakiLaki ?? ""
+                },
+                {
+                    label: "Perempuan",
+                    name: "perempuan",
+                    type: "number",
+                    value: d.perempuan ?? ""
+                },
+                {
+                    label: "Jumlah Kepala Keluarga (KK)",
+                    name: "jumlahKK",
+                    type: "number",
+                    value: d.jumlahKK ?? ""
+                },
+                {
+                    label: "Jumlah Dusun / RT / RW",
+                    name: "jumlahDusunRT",
+                    value: d.jumlahDusunRT || ""
+                },
+                {
+                    label: "Kelompok Usia (Kategori: Jumlah per baris)",
+                    name: "kelompokUsia",
+                    type: "textarea",
+                    rows: 4,
+                    value: formatKategori(d.kelompokUsia)
+                },
+                {
+                    label: "Pendidikan Terakhir (Kategori: Jumlah per baris)",
+                    name: "pendidikan",
+                    type: "textarea",
+                    rows: 4,
+                    value: formatKategori(d.pendidikan)
+                },
+                {
+                    label: "Mata Pencaharian (Kategori: Jumlah per baris)",
+                    name: "pekerjaan",
+                    type: "textarea",
+                    rows: 4,
+                    value: formatKategori(d.pekerjaan)
+                },
+                {
+                    label: "Jumlah Penduduk Usia Produktif",
+                    name: "usiaProduktif",
+                    type: "number",
+                    value: d.usiaProduktif ?? ""
+                }
+            ],
+            async data => {
+                const tahun = Number(data.get("tahun"));
+
+                if (!Number.isInteger(tahun) || tahun < 1900 || tahun > 2200) {
+                    throw new Error("Masukkan tahun yang valid.");
+                }
+
+                // Cegah tahun yang sama dibuat dua kali
+                if (!editMode && daftarDemografi.some(item => item.tahun === tahun)) {
+                    throw new Error(`Data demografi tahun ${tahun} sudah tersedia.`);
+                }
+
+                const payload = {
+                    tahun,
+                    jumlahPenduduk: Number(data.get("jumlahPenduduk") || 0),
+                    lakiLaki: Number(data.get("lakiLaki") || 0),
+                    perempuan: Number(data.get("perempuan") || 0),
+                    jumlahKK: Number(data.get("jumlahKK") || 0),
+                    jumlahDusunRT: data.get("jumlahDusunRT"),
+
+                    kelompokUsia: parseKategori(data.get("kelompokUsia")),
+                    pendidikan: parseKategori(data.get("pendidikan")),
+                    pekerjaan: parseKategori(data.get("pekerjaan")),
+
+                    usiaProduktif: Number(data.get("usiaProduktif") || 0)
+                };
+
+                await api(`/api/desa/${desa._id}/demografi`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                tahunDemografiAktif = tahun;
+
+                alert(
+                    editMode
+                        ? "Data demografi berhasil diperbarui!"
+                        : "Data demografi berhasil ditambahkan!"
+                );
+            }
+        );
+    }
+
+    async function hapusDemografi() {
+        if (!demografi.tahun) return;
+
+        const konfirmasi = confirm(
+            `Yakin ingin menghapus data demografi tahun ${demografi.tahun}?`
+        );
+
+        if (!konfirmasi) return;
+
+        try {
+            await api(
+                `/api/desa/${desa._id}/demografi/${demografi.tahun}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+            tahunDemografiAktif = null;
+
+            alert("Data demografi berhasil dihapus!");
+
+            await muatKonten();
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    function tampilkanGaleri() {
+    const container = $("#desa-galeri");
+    if (!container) return;
+
+    const data = [...galeri].sort(
+        (a, b) => Number(a.urutan || 0) - Number(b.urutan || 0)
+    );
+
+    container.innerHTML = data.length
+        ? data.map(item => `
+            <div class="galeri-item"
+                style="
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 12px;
+                ">
+
+                <img
+                    src="${esc(item.gambar)}"
+                    alt="${esc(item.keterangan || "Dokumentasi desa")}"
+                    style="
+                        display: block;
+                        width: 100%;
+                        height: 230px;
+                        object-fit: cover;
+                    "
+                >
+
+                <div class="galeri-caption"
+                    style="display:block !important; padding:15px;">
+                    <p style="margin:0; color:#334155;">
+                        ${esc(item.keterangan || "Dokumentasi desa")}
+                    </p>
+                </div>
+
+                ${adminAktif ? `
+                    <div class="admin-item-actions"
+                        style="
+                            display:flex !important;
+                            visibility:visible !important;
+                            opacity:1 !important;
+                            gap:10px;
+                            padding:0 15px 15px;
+                        ">
+
+                        <button
+                            type="button"
+                            class="btn-edit-galeri"
+                            data-id="${item._id}"
+                            style="
+                                display:inline-flex !important;
+                                padding:9px 14px;
+                                border:0;
+                                border-radius:6px;
+                                background:#e6f1fb;
+                                color:#1769aa;
+                                cursor:pointer;
+                                font-weight:600;
+                            ">
+                            <i class="fa-solid fa-pen"></i>&nbsp; Edit
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn-hapus-galeri"
+                            data-id="${item._id}"
+                            style="
+                                display:inline-flex !important;
+                                padding:9px 14px;
+                                border:0;
+                                border-radius:6px;
+                                background:#fde8e8;
+                                color:#c62828;
+                                cursor:pointer;
+                                font-weight:600;
+                            ">
+                            <i class="fa-solid fa-trash"></i>&nbsp; Hapus
+                        </button>
+                    </div>
+                ` : ""}
+            </div>
+        `).join("")
+        : `<p class="placeholder">Dokumentasi desa belum tersedia.</p>`;
+
+    if (!adminAktif) return;
+
+    container.querySelectorAll(".btn-edit-galeri").forEach(button => {
+        button.onclick = () => {
+            const item = galeri.find(
+                foto => foto._id === button.dataset.id
+            );
+
+            if (item) formGaleri(item);
+        };
+    });
+
+    container.querySelectorAll(".btn-hapus-galeri").forEach(button => {
+        button.onclick = () => hapusGaleri(button.dataset.id);
+    });
+}
+
+    // ==========================================
+// FORM TAMBAH / EDIT DOKUMENTASI
+// ==========================================
+    function formGaleri(item = null) {
+        bukaForm(
+            item ? "Edit Dokumentasi Desa" : "Tambah Dokumentasi Desa",
+            [
+                {
+                    label: "Pilih Foto",
+                    name: "gambar",
+                    type: "file",
+                    required: !item
+                },
+                {
+                    label: "Keterangan Foto",
+                    name: "keterangan",
+                    type: "textarea",
+                    rows: 3,
+                    value: item?.keterangan || "",
+                    required: true
+                },
+                {
+                    label: "Urutan Tampilan",
+                    name: "urutan",
+                    type: "number",
+                    value: item?.urutan ?? 0
+                }
+            ],
+            async data => {
+                const file = data.get("gambar");
+
+                if (!item && (!file || !file.size)) {
+                    throw new Error("Silakan pilih foto dokumentasi.");
+                }
+
+                const url = item
+                    ? `/api/desa/${desa._id}/galeri/${item._id}`
+                    : `/api/desa/${desa._id}/galeri`;
+
+                await api(url, {
+                    method: item ? "PUT" : "POST",
+                    body: data
+                });
+
+                alert(
+                    item
+                        ? "Dokumentasi berhasil diperbarui!"
+                        : "Dokumentasi berhasil ditambahkan!"
+                );
+            }
+        );
+    }
+
+    // ==========================================
+    // HAPUS DOKUMENTASI
+    // ==========================================
+    async function hapusGaleri(id) {
+        const item = galeri.find(foto => foto._id === id);
+        if (!item) return;
+
+        if (!confirm("Yakin ingin menghapus foto dokumentasi ini?")) {
+            return;
+        }
+
+        try {
+            await api(`/api/desa/${desa._id}/galeri/${id}`, {
+                method: "DELETE"
+            });
+
+            alert("Foto berhasil dihapus!");
+            await muatKonten();
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    // PETA
+    // ==========================================
+    // PETA LOKASI DETAIL DESA
+    // ==========================================
+    function tampilkanPeta() {
+        const el = $("#map");
+
+        if (!el || typeof L === "undefined") return;
+
+        const koordinat = profil.koordinat || {};
+        const lat = Number(koordinat.latitude);
+        const lng = Number(koordinat.longitude);
+
+        if (
+            koordinat.latitude == null ||
+            koordinat.longitude == null ||
+            !Number.isFinite(lat) ||
+            !Number.isFinite(lng)
+        ) {
+            el.innerHTML = `
+                <p class="placeholder" style="padding:24px">
+                    Koordinat desa belum tersedia.
+                </p>
+            `;
+            return;
+        }
+
+        if (map) {
+            map.remove();
+            map = null;
+        }
+
+        map = L.map(el).setView([lat, lng], 14);
+
+        // Gunakan OpenStreetMap
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                attribution: "&copy; OpenStreetMap contributors",
+                maxZoom: 19
+            }
+        ).addTo(map);
+
+        L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup(`<strong>${esc(desa.namaDesa)}</strong>`)
+            .openPopup();
+
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 300);
+    }
+
+    // TOMBOL KELOLA ADMIN
+    function tombolKelola(section, label, callback) {
+        if (!section || !adminAktif) return;
+
+        const title = $(".section-title", section);
+        if (!title || $(".btn-kelola-section", title)) return;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn-kelola-section";
+        button.textContent = `Kelola ${label}`;
+        button.onclick = callback;
+
+        title.appendChild(button);
+    }
+
+    function tampilkanTombolAdmin() {
+        if (!adminAktif) return;
+
+        $$(".detail-desa-page main .section").forEach(section => {
+            const heading = $("h2", section);
+            if (!heading) return;
+
+            const title = heading.textContent.toLowerCase();
+
+            if (title.includes("data desa")) {
+                tombolKelola(section, "Profil Desa", formProfil);
+            } 
+             else if (title.includes("dokumentasi") || title.includes("potret")
+            ) {
+                tombolKelola(section,"Tambah Dokumentasi",() => formGaleri());
+            }
+        });
+    }
+
+    
+    // ==========================================
+    // STRUKTUR ORGANISASI DESA DINAMIS
+    // ==========================================
+
+    function tampilkanOrganisasi() {
+        const container = $("#org-chart");
+        const toolbar = $("#org-admin-toolbar");
+
+        if (!container) return;
+
+        const anggota = konten.organigram?.anggota || [];
+
+        if (toolbar) {
+            toolbar.style.display = adminAktif ? "flex" : "none";
+        }
+
+        const tombolTambah = $("#btn-tambah-jabatan");
+
+        if (tombolTambah && adminAktif) {
+            tombolTambah.onclick = () => formAnggota();
+        }
+
+        if (!anggota.length) {
+            container.innerHTML = `
+                <div class="org-empty">
+                    <i class="fa-solid fa-sitemap"></i>
+                    <p>Struktur organisasi desa belum tersedia.</p>
+                    ${adminAktif ? "<small>Gunakan tombol Tambah Jabatan untuk mulai mengisi.</small>" : ""}
+                </div>
+            `;
+            return;
+        }
+
+        const daftarAnak = parentId => anggota
+            .filter(item => String(item.parentId || "") === String(parentId || ""))
+            .sort((a, b) => Number(a.urutan || 0) - Number(b.urutan || 0));
+
+        function buatNode(item, jalur = new Set()) {
+            const id = String(item._id);
+
+            // Mencegah render berulang jika data lama memiliki hubungan melingkar
+            if (jalur.has(id)) return "";
+
+            const jalurBaru = new Set(jalur);
+            jalurBaru.add(id);
+
+            const anak = daftarAnak(id);
+
+            return `
+                <div class="org-branch">
+                    <article class="org-node ${!item.parentId ? "org-node-root" : ""}">
+
+                        ${
+                            item.foto
+                                ? `<img class="org-photo"
+                                    src="${esc(item.foto)}"
+                                    alt="${esc(item.nama)}"
+                                    loading="lazy">`
+                                : `<div class="org-avatar">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>`
+                        }
+
+                        <strong>${esc(item.jabatan)}</strong>
+                        <small>${esc(item.nama)}</small>
+
+                        ${
+                            item.bidang
+                                ? `<span class="org-field">${esc(item.bidang)}</span>`
+                                : ""
+                        }
+
+                        ${
+                            adminAktif
+                                ? `
+                                    <div class="org-actions">
+                                        <button type="button"
+                                            data-org-edit="${id}">
+                                            <i class="fa-solid fa-pen"></i> Edit
+                                        </button>
+
+                                        <button type="button"
+                                            data-org-delete="${id}">
+                                            <i class="fa-solid fa-trash"></i> Hapus
+                                        </button>
+                                    </div>
+                                `
+                                : ""
+                        }
+                    </article>
+
+                    ${
+                        anak.length
+                            ? `
+                                <div class="org-children ${item.orientasiAnak === "vertical" ? "is-vertical" : "is-horizontal"}">
+                                    ${anak.map(child => buatNode(child, jalurBaru)).join("")}
+                                </div>
+                            `
+                            : ""
+                    }
+                </div>
+            `;
+        }
+
+        const akar = daftarAnak(null);
+
+        container.innerHTML = akar.length
+            ? `
+                <div class="org-tree">
+                    ${akar.map(item => buatNode(item)).join("")}
+                </div>
+            `
+            : `
+                <div class="org-empty">
+                    <p>Tidak ditemukan jabatan utama. Periksa hubungan atasan setiap jabatan.</p>
+                </div>
+            `;
+
+        if (!adminAktif) return;
+
+        container.querySelectorAll("[data-org-edit]").forEach(button => {
+            button.onclick = () => {
+                const target = anggota.find(
+                    item => String(item._id) === button.dataset.orgEdit
+                );
+
+                if (target) formAnggota(target);
+            };
+        });
+
+        container.querySelectorAll("[data-org-delete]").forEach(button => {
+            button.onclick = () => hapusAnggota(button.dataset.orgDelete);
+        });
+    }
+
+        function formAnggota(target = null) {
+            const anggota = konten.organigram?.anggota || [];
+
+            // Jabatan yang boleh dipilih sebagai atasan
+            // Jabatan itu sendiri tidak boleh menjadi atasannya.
+            const pilihanAtasan = anggota.filter(item =>
+                !target || String(item._id) !== String(target._id)
+            );
+
+            const optionsAtasan = [
+                { value: "", label: "Tidak ada (Jabatan Utama)" },
+                ...pilihanAtasan.map(item => ({
+                    value: String(item._id),
+                    label: `${item.jabatan} — ${item.nama}`
+                }))
+            ];
+
+            bukaForm(
+                target ? "Edit Jabatan" : "Tambah Jabatan",
+                [
+                    {
+                        label: "Nama Pejabat",
+                        name: "nama",
+                        value: target?.nama || "",
+                        required: true
+                    },
+                    {
+                        label: "Nama Jabatan",
+                        name: "jabatan",
+                        value: target?.jabatan || "",
+                        required: true
+                    },
+                    {
+                        label: "Bidang / Keterangan",
+                        name: "bidang",
+                        value: target?.bidang || "",
+                        placeholder: "Contoh: Keuangan, Pemerintahan, Dusun A"
+                    },
+                    {
+                        label: "Jabatan Atasan",
+                        name: "parentId",
+                        type: "select",
+                        value: target?.parentId || "",
+                        options: optionsAtasan
+                    },
+                    {
+                        label: "Susunan Jabatan Bawahan",
+                        name: "orientasiAnak",
+                        type: "select",
+                        value: target?.orientasiAnak || "horizontal",
+                        options: [
+                            { value: "horizontal", label: "Horizontal (Sejajar)" },
+                            { value: "vertical", label: "Vertikal (Bertingkat)" }
+                        ]
+                    },
+                    {
+                        label: "Urutan",
+                        name: "urutan",
+                        type: "number",
+                        value: target?.urutan ?? 0
+                    },
+                    {
+                        label: "Foto Pejabat (URL, opsional)",
+                        name: "foto",
+                        value: target?.foto || "",
+                        placeholder: "https://..."
+                    }
+                ],
+                async data => {
+                    const payload = {
+                        nama: data.get("nama").trim(),
+                        jabatan: data.get("jabatan").trim(),
+                        bidang: data.get("bidang").trim(),
+                        parentId: data.get("parentId") || null,
+                        orientasiAnak: data.get("orientasiAnak"),
+                        urutan: Number(data.get("urutan") || 0),
+                        foto: data.get("foto").trim()
+                    };
+
+                    const url = target
+                        ? `/api/desa/${desa._id}/organigram/${target._id}`
+                        : `/api/desa/${desa._id}/organigram`;
+
+                    await api(url, {
+                        method: target ? "PUT" : "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                }
+            );
+        }
+
+        async function hapusAnggota(id) {
+            const target = (konten.organigram?.anggota || []).find(
+                item => String(item._id) === String(id)
+            );
+
+            if (!target) return;
+
+            if (!confirm(`Hapus jabatan ${target.jabatan} — ${target.nama}?`)) {
+                return;
+            }
+
+            try {
+                await api(
+                    `/api/desa/${desa._id}/organigram/${id}`,
+                    { method: "DELETE" }
+                );
+
+                alert("Jabatan berhasil dihapus.");
+                await muatKonten();
+
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+    try {
+        await muatKonten();
+    } catch (error) {
+        console.error("Detail Desa:", error);
+        if ($("#desa-nama")) $("#desa-nama").textContent = "Gagal memuat data desa";
+        alert(error.message);
     }
 });
