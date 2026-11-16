@@ -56,18 +56,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const lokasiDesa = [
         {
             nama: "Desa Pulau Nibung",
-            lat: -2.8970700201566784,
-            lng: 110.85125012346921
+            lat: -2.8974924752552913, 
+            lng: 110.85136051459045
         },
         {
             nama: "Desa Sungai Baru",
-            lat: -2.9902012839775276,
-            lng: 110.85424584969269
+            lat: -2.98889345838713, 
+            lng: 110.85455596280032
         },
         {
             nama: "Desa Sungai Bundung",
-            lat: -2.989670241182833,
-            lng: 110.88306488952134
+            lat: -3.0193161231424597, 
+            lng: 110.88751494717931
         },
         {
             nama: "Desa Sungai Raja",
@@ -76,15 +76,19 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         {
             nama: "Desa Sungai Damar",
-            lat: -3.0548757610171604,
-            lng: 111.01853520736358
+            lat: -3.0548329066611415, 
+            lng: 111.0185673943041
         }
     ];
 
     lokasiDesa.forEach(function (desa) {
+        const kecamatan = desa.nama === "Desa Sungai Damar"
+            ? "Kecamatan Pantai Lunci"
+            : "Kecamatan Jelai";
+
         L.marker([desa.lat, desa.lng])
             .addTo(map)
-            .bindPopup(`<b>${desa.nama}</b><br>Kecamatan Jelai`);
+            .bindPopup(`<b>${desa.nama}</b><br>${kecamatan}`);
     });
 });
 
@@ -400,51 +404,132 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch('/api/cerita')
             .then(res => res.json())
             .then(data => {
-                dataCeritaGlobal = data; // Simpan ke variabel global
+                dataCeritaGlobal = data;
                 containerCerita.innerHTML = '';
-                
-                data.forEach(cerita => {
+
+                // Urutkan cerita terbaru terlebih dahulu
+                const daftarCerita = [...data].sort((a, b) => {
+                    return new Date(b.tanggal || 0) -
+                        new Date(a.tanggal || 0);
+                });
+
+                daftarCerita.forEach(cerita => {
                     const idCerita = cerita._id || cerita.id;
+
                     const card = document.createElement('article');
-                    card.className = 'news-item';
-                    card.style.position = 'relative';
-                    
+                    card.className = 'cerita-card';
+
+                    // Tombol admin
                     let actionButtons = '';
+
                     if (isAdmin) {
-                        // Tombol edit kini hanya memanggil ID, sangat aman dari error teks panjang!
                         actionButtons = `
-                            <div style="position: absolute; top: 15px; right: 15px; z-index: 10; display: flex; gap: 8px;">
-                                <button onclick="editCerita('${idCerita}')" style="background: #ffc107; color: #000; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fa-solid fa-pen"></i> Edit</button>
-                                <button onclick="hapusCerita('${idCerita}')" style="background: #dc3545; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fa-solid fa-trash"></i> Hapus</button>
+                            <div class="cerita-admin-actions">
+                                <button type="button"
+                                    onclick="editCerita('${idCerita}')"
+                                    class="btn-cerita-edit">
+                                    <i class="fa-solid fa-pen"></i> Edit
+                                </button>
+
+                                <button type="button"
+                                    onclick="hapusCerita('${idCerita}')"
+                                    class="btn-cerita-hapus">
+                                    <i class="fa-solid fa-trash"></i> Hapus
+                                </button>
                             </div>
                         `;
                     }
 
+                    // Format tanggal
                     const dateObj = new Date(cerita.tanggal);
-                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                    const tanggalFormatted = dateObj.toLocaleDateString('id-ID', options);
-                    
-                    const namaPenulis = cerita.penulis ? cerita.penulis: "admin/Tim Ekspedisi";
+
+                    const tanggalFormatted = !isNaN(dateObj.getTime())
+                        ? dateObj.toLocaleDateString('id-ID', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })
+                        : '-';
+
+                    const namaPenulis = cerita.penulis ||
+                        'Admin/Tim Ekspedisi';
+
+                    const deskripsi = cerita.deskripsi || '';
 
                     card.innerHTML = `
-                        ${actionButtons}
-                        <div class="news-img">
-                            <img src="${cerita.gambar}" alt="${cerita.judul}">
-                        </div>
-                        <div class="news-content">
-                            <a href="detail-cerita.html?id=${idCerita}"><h2 class="news-title">${cerita.judul}</h2></a>
-                            <div class="news-meta" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                                <span><i class="fa-solid fa-user-pen"></i> Penulis: ${namaPenulis}</span>
-                                <span><i class="fa-regular fa-calendar"></i> ${tanggalFormatted}</span>
+                        <img
+                            src="${cerita.gambar}"
+                            alt="${cerita.judul || 'Cerita Kawasan'}"
+                            onerror="this.src='img/no-image.png'"
+                        >
+
+                        <div class="cerita-card-body">
+
+                            ${actionButtons}
+
+                            <h3>${cerita.judul || 'Tanpa Judul'}</h3>
+
+                            <div class="cerita-meta">
+                                <span>
+                                    <i class="fa-solid fa-user-pen"></i>
+                                    ${namaPenulis}
+                                </span>
+
+                                <span>
+                                    <i class="fa-regular fa-calendar"></i>
+                                    ${tanggalFormatted}
+                                </span>
                             </div>
-                            <p class="news-excerpt">${cerita.deskripsi.substring(0, 150)}...</p>
-                            <a href="detail-cerita.html?id=${idCerita}" class="read-more">Baca Selengkapnya <i class="fa-solid fa-arrow-right"></i></a>
+
+                            <p class="cerita-deskripsi">
+                                ${deskripsi.substring(0, 150)}
+                                ${deskripsi.length > 150 ? '...' : ''}
+                            </p>
+
+                            <a href="detail-cerita.html?id=${idCerita}"
+                            class="desa-link">
+                                Baca Selengkapnya
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+
                         </div>
                     `;
+
                     containerCerita.appendChild(card);
                 });
+
+            })
+            .catch(error => {
+                console.error('Gagal memuat cerita:', error);
+                containerCerita.innerHTML =
+                    '<p>Gagal memuat cerita kawasan.</p>';
             });
     }
+
+
+    // C. Kontrol Carousel
+    const tombolPrev = document.querySelector('.cerita-prev');
+    const tombolNext = document.querySelector('.cerita-next');
+
+    if (tombolPrev) {
+        tombolPrev.addEventListener('click', function () {
+            containerCerita.scrollBy({
+                left: -containerCerita.clientWidth * 0.8,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    if (tombolNext) {
+        tombolNext.addEventListener('click', function () {
+            containerCerita.scrollBy({
+                left: containerCerita.clientWidth * 0.8,
+                behavior: 'smooth'
+            });
+        });
+    }
+
     loadCerita();
 
     // C. Hapus Cerita
@@ -1073,6 +1158,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         bukaForm("Kelola Profil Desa", [
             {
+                label: "Foto Profil Desa",
+                name: "gambarHero",
+                type: "file",
+                required: false
+            },
+            {
                 label: "Deskripsi Singkat Desa",
                 name: "ringkasan",
                 type: "textarea",
@@ -1163,10 +1254,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             await api(`/api/desa/${desa._id}/profil`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
+                body: data
             });
 
             alert("Profil desa berhasil disimpan!");
@@ -1580,7 +1668,15 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ` : ""}
             </div>
         `).join("")
-        : `<p class="placeholder">Dokumentasi desa belum tersedia.</p>`;
+        : `
+            <div class="galeri-empty">
+                <img
+                    src="img/no-image.png"
+                    alt="Dokumentasi belum tersedia"
+                >
+                <p>Dokumentasi desa belum tersedia.</p>
+            </div>
+        `;
 
     if (!adminAktif) return;
 
@@ -1769,230 +1865,302 @@ document.addEventListener("DOMContentLoaded", async function () {
     // STRUKTUR ORGANISASI DESA DINAMIS
     // ==========================================
 
-    function tampilkanOrganisasi() {
-        const container = $("#org-chart");
-        const toolbar = $("#org-admin-toolbar");
+    
+function tampilkanOrganisasi() {
+    const container = $("#org-chart");
+    const toolbar = $("#org-admin-toolbar");
 
-        if (!container) return;
+    if (!container) return;
 
-        const anggota = konten.organigram?.anggota || [];
+    const anggota = konten.organigram?.anggota || [];
 
-        if (toolbar) {
-            toolbar.style.display = adminAktif ? "flex" : "none";
-        }
+    if (toolbar) {
+        toolbar.style.display = adminAktif ? "flex" : "none";
+    }
 
-        const tombolTambah = $("#btn-tambah-jabatan");
+    const tombolTambah = $("#btn-tambah-jabatan");
 
-        if (tombolTambah && adminAktif) {
-            tombolTambah.onclick = () => formAnggota();
-        }
+    if (tombolTambah && adminAktif) {
+        tombolTambah.onclick = () => formAnggota();
+    }
 
-        if (!anggota.length) {
-            container.innerHTML = `
-                <div class="org-empty">
-                    <i class="fa-solid fa-sitemap"></i>
-                    <p>Struktur organisasi desa belum tersedia.</p>
-                    ${adminAktif ? "<small>Gunakan tombol Tambah Jabatan untuk mulai mengisi.</small>" : ""}
-                </div>
-            `;
-            return;
-        }
+    if (!anggota.length) {
+        container.innerHTML = `
+            <div class="org-empty">
+                <i class="fa-solid fa-sitemap"></i>
+                <p>Struktur organisasi desa belum tersedia.</p>
+                ${adminAktif
+                    ? "<small>Gunakan tombol Tambah Jabatan untuk mulai mengisi.</small>"
+                    : ""
+                }
+            </div>
+        `;
+        return;
+    }
 
-        const daftarAnak = parentId => anggota
-            .filter(item => String(item.parentId || "") === String(parentId || ""))
-            .sort((a, b) => Number(a.urutan || 0) - Number(b.urutan || 0));
+    // Mengambil jabatan berdasarkan atasan
+    const daftarAnak = parentId => anggota
+        .filter(item =>
+            String(item.parentId || "") === String(parentId || "")
+        )
+        .sort((a, b) =>
+            Number(a.urutan || 0) - Number(b.urutan || 0)
+        );
 
-        function buatNode(item, jalur = new Set()) {
-            const id = String(item._id);
+    // Membuat setiap kotak jabatan
+    function buatNode(item, jalur = new Set()) {
+        const id = String(item._id);
 
-            // Mencegah render berulang jika data lama memiliki hubungan melingkar
-            if (jalur.has(id)) return "";
+        // Mencegah hubungan jabatan melingkar
+        if (jalur.has(id)) return "";
 
-            const jalurBaru = new Set(jalur);
-            jalurBaru.add(id);
+        const jalurBaru = new Set(jalur);
+        jalurBaru.add(id);
 
-            const anak = daftarAnak(id);
+        const anak = daftarAnak(id);
 
-            return `
-                <div class="org-branch">
-                    <article class="org-node ${!item.parentId ? "org-node-root" : ""}">
+        return `
+            <div class="org-branch">
 
-                        ${
-                            item.foto
-                                ? `<img class="org-photo"
-                                    src="${esc(item.foto)}"
-                                    alt="${esc(item.nama)}"
-                                    loading="lazy">`
-                                : `<div class="org-avatar">
-                                    <i class="fa-solid fa-user"></i>
-                                </div>`
-                        }
+                <article class="org-node ${!item.parentId ? "org-node-root" : ""}">
 
-                        <strong>${esc(item.jabatan)}</strong>
-                        <small>${esc(item.nama)}</small>
+                    <strong class="org-position">
+                        ${esc(item.jabatan)}
+                    </strong>
 
-                        ${
-                            item.bidang
-                                ? `<span class="org-field">${esc(item.bidang)}</span>`
-                                : ""
-                        }
-
-                        ${
-                            adminAktif
-                                ? `
-                                    <div class="org-actions">
-                                        <button type="button"
-                                            data-org-edit="${id}">
-                                            <i class="fa-solid fa-pen"></i> Edit
-                                        </button>
-
-                                        <button type="button"
-                                            data-org-delete="${id}">
-                                            <i class="fa-solid fa-trash"></i> Hapus
-                                        </button>
-                                    </div>
-                                `
-                                : ""
-                        }
-                    </article>
+                    <span class="org-name">
+                        ${esc(item.nama)}
+                    </span>
 
                     ${
-                        anak.length
+                        adminAktif
                             ? `
-                                <div class="org-children ${item.orientasiAnak === "vertical" ? "is-vertical" : "is-horizontal"}">
-                                    ${anak.map(child => buatNode(child, jalurBaru)).join("")}
+                                <div class="org-actions">
+
+                                    <button type="button"
+                                        data-org-edit="${id}">
+                                        <i class="fa-solid fa-pen"></i>
+                                        Edit
+                                    </button>
+
+                                    <button type="button"
+                                        data-org-delete="${id}">
+                                        <i class="fa-solid fa-trash"></i>
+                                        Hapus
+                                    </button>
+
                                 </div>
                             `
                             : ""
                     }
-                </div>
-            `;
-        }
 
-        const akar = daftarAnak(null);
+                </article>
 
-        container.innerHTML = akar.length
-            ? `
+                ${
+                    anak.length
+                        ? `
+                            <div class="org-children ${
+                                item.orientasiAnak === "vertical"
+                                    ? "is-vertical"
+                                    : "is-horizontal"
+                            }">
+
+                                ${anak.map(child =>
+                                    buatNode(child, jalurBaru)
+                                ).join("")}
+
+                            </div>
+                        `
+                        : ""
+                }
+
+            </div>
+        `;
+    }
+
+    const akar = daftarAnak(null);
+
+    container.innerHTML = akar.length
+        ? `
+            <div class="org-scroll">
                 <div class="org-tree">
                     ${akar.map(item => buatNode(item)).join("")}
                 </div>
-            `
-            : `
-                <div class="org-empty">
-                    <p>Tidak ditemukan jabatan utama. Periksa hubungan atasan setiap jabatan.</p>
-                </div>
-            `;
+            </div>
+        `
+        : `
+            <div class="org-empty">
+                <p>
+                    Tidak ditemukan jabatan utama.
+                    Periksa hubungan atasan setiap jabatan.
+                </p>
+            </div>
+        `;
 
-        if (!adminAktif) return;
+// Menyamakan lebar seluruh hierarki organisasi
+requestAnimationFrame(() => {
+    const tree = container.querySelector(".org-tree");
 
-        container.querySelectorAll("[data-org-edit]").forEach(button => {
-            button.onclick = () => {
-                const target = anggota.find(
-                    item => String(item._id) === button.dataset.orgEdit
-                );
+    const rootBranch = tree?.querySelector(
+        ":scope > .org-branch"
+    );
 
-                if (target) formAnggota(target);
-            };
-        });
+    // Ambil anak pertama tanpa mengasumsikan orientasinya
+    const rootChildren = rootBranch?.querySelector(
+        ":scope > .org-children"
+    );
 
-        container.querySelectorAll("[data-org-delete]").forEach(button => {
-            button.onclick = () => hapusAnggota(button.dataset.orgDelete);
+    const sekretarisBranch = rootChildren?.querySelector(
+        ":scope > .org-branch"
+    );
+
+    const horizontalChildren = sekretarisBranch?.querySelector(
+        ":scope > .org-children.is-horizontal"
+    );
+
+    if (!rootBranch || !rootChildren ||
+        !sekretarisBranch || !horizontalChildren) {
+        console.warn("Struktur organigram tidak ditemukan.");
+        return;
+    }
+
+    // Lebar seluruh barisan jabatan bawahan
+    const lebarBagan = horizontalChildren.scrollWidth;
+
+    // Samakan lebar seluruh induk agar titik tengah konsisten
+    [rootBranch, rootChildren, sekretarisBranch].forEach(element => {
+        element.style.setProperty(
+            "width",
+            `${lebarBagan}px`,
+            "important"
+        );
+    });
+
+    console.log("Lebar bagan berhasil disesuaikan:", lebarBagan);
+});
+
+    // Pastikan posisi scroll selalu dimulai dari kiri
+    const scrollArea = container.querySelector(".org-scroll");
+
+    if (scrollArea) {
+        requestAnimationFrame(() => {
+            scrollArea.scrollLeft = 0;
         });
     }
 
-        function formAnggota(target = null) {
-            const anggota = konten.organigram?.anggota || [];
+    if (!adminAktif) return;
 
-            // Jabatan yang boleh dipilih sebagai atasan
-            // Jabatan itu sendiri tidak boleh menjadi atasannya.
-            const pilihanAtasan = anggota.filter(item =>
-                !target || String(item._id) !== String(target._id)
+    // Event edit
+    container.querySelectorAll("[data-org-edit]").forEach(button => {
+        button.onclick = () => {
+            const target = anggota.find(
+                item => String(item._id) === button.dataset.orgEdit
             );
 
-            const optionsAtasan = [
-                { value: "", label: "Tidak ada (Jabatan Utama)" },
-                ...pilihanAtasan.map(item => ({
-                    value: String(item._id),
-                    label: `${item.jabatan} — ${item.nama}`
-                }))
-            ];
+            if (target) formAnggota(target);
+        };
+    });
 
-            bukaForm(
-                target ? "Edit Jabatan" : "Tambah Jabatan",
-                [
+    // Event hapus
+    container.querySelectorAll("[data-org-delete]").forEach(button => {
+        button.onclick = () => hapusAnggota(button.dataset.orgDelete);
+    });
+}
+
+
+        
+function formAnggota(target = null) {
+    const anggota = konten.organigram?.anggota || [];
+
+    // Pilihan jabatan atasan
+    const pilihanAtasan = anggota.filter(item =>
+        !target || String(item._id) !== String(target._id)
+    );
+
+    const optionsAtasan = [
+        {
+            value: "",
+            label: "Tidak ada (Jabatan Utama)"
+        },
+
+        ...pilihanAtasan.map(item => ({
+            value: String(item._id),
+            label: `${item.jabatan} — ${item.nama}`
+        }))
+    ];
+
+    bukaForm(
+        target ? "Edit Jabatan" : "Tambah Jabatan",
+
+        [
+            {
+                label: "Nama Pejabat",
+                name: "nama",
+                value: target?.nama || "",
+                required: true
+            },
+            {
+                label: "Nama Jabatan",
+                name: "jabatan",
+                value: target?.jabatan || "",
+                required: true
+            },
+            {
+                label: "Jabatan Atasan",
+                name: "parentId",
+                type: "select",
+                value: target?.parentId || "",
+                options: optionsAtasan
+            },
+            {
+                label: "Susunan Jabatan Bawahan",
+                name: "orientasiAnak",
+                type: "select",
+                value: target?.orientasiAnak || "horizontal",
+                options: [
                     {
-                        label: "Nama Pejabat",
-                        name: "nama",
-                        value: target?.nama || "",
-                        required: true
+                        value: "horizontal",
+                        label: "Horizontal (Sejajar)"
                     },
                     {
-                        label: "Nama Jabatan",
-                        name: "jabatan",
-                        value: target?.jabatan || "",
-                        required: true
-                    },
-                    {
-                        label: "Bidang / Keterangan",
-                        name: "bidang",
-                        value: target?.bidang || "",
-                        placeholder: "Contoh: Keuangan, Pemerintahan, Dusun A"
-                    },
-                    {
-                        label: "Jabatan Atasan",
-                        name: "parentId",
-                        type: "select",
-                        value: target?.parentId || "",
-                        options: optionsAtasan
-                    },
-                    {
-                        label: "Susunan Jabatan Bawahan",
-                        name: "orientasiAnak",
-                        type: "select",
-                        value: target?.orientasiAnak || "horizontal",
-                        options: [
-                            { value: "horizontal", label: "Horizontal (Sejajar)" },
-                            { value: "vertical", label: "Vertikal (Bertingkat)" }
-                        ]
-                    },
-                    {
-                        label: "Urutan",
-                        name: "urutan",
-                        type: "number",
-                        value: target?.urutan ?? 0
-                    },
-                    {
-                        label: "Foto Pejabat (URL, opsional)",
-                        name: "foto",
-                        value: target?.foto || "",
-                        placeholder: "https://..."
+                        value: "vertical",
+                        label: "Vertikal (Bertingkat)"
                     }
-                ],
-                async data => {
-                    const payload = {
-                        nama: data.get("nama").trim(),
-                        jabatan: data.get("jabatan").trim(),
-                        bidang: data.get("bidang").trim(),
-                        parentId: data.get("parentId") || null,
-                        orientasiAnak: data.get("orientasiAnak"),
-                        urutan: Number(data.get("urutan") || 0),
-                        foto: data.get("foto").trim()
-                    };
+                ]
+            },
+            {
+                label: "Urutan",
+                name: "urutan",
+                type: "number",
+                value: target?.urutan ?? 0
+            }
+        ],
 
-                    const url = target
-                        ? `/api/desa/${desa._id}/organigram/${target._id}`
-                        : `/api/desa/${desa._id}/organigram`;
+        async data => {
 
-                    await api(url, {
-                        method: target ? "PUT" : "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                }
-            );
+            const payload = {
+                nama: data.get("nama").trim(),
+                jabatan: data.get("jabatan").trim(),
+                parentId: data.get("parentId") || null,
+                orientasiAnak: data.get("orientasiAnak"),
+                urutan: Number(data.get("urutan") || 0)
+            };
+
+            const url = target
+                ? `/api/desa/${desa._id}/organigram/${target._id}`
+                : `/api/desa/${desa._id}/organigram`;
+
+            await api(url, {
+                method: target ? "PUT" : "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
         }
+    );
+}
+
 
         async function hapusAnggota(id) {
             const target = (konten.organigram?.anggota || []).find(
@@ -2027,3 +2195,236 @@ document.addEventListener("DOMContentLoaded", async function () {
         alert(error.message);
     }
 });
+
+// ===================================
+// MENAMPILKAN PRODUK UMKM DI INDEX
+// ===================================
+
+async function tampilkanProdukUMKM() {
+    const container = document.getElementById('umkm-container');
+
+    if (!container) return;
+
+    try {
+        const response = await fetch('/api/umkm');
+
+        if (!response.ok) {
+            throw new Error('Gagal mengambil data UMKM');
+        }
+
+        const data = await response.json();
+
+        container.innerHTML = '';
+
+        // Tampilkan maksimal 8 UMKM
+        data.slice(0, 8).forEach(umkm => {
+
+            const card = document.createElement('div');
+            card.className = 'umkm-product-card';
+
+            const gambar = document.createElement('img');
+            gambar.src = umkm.gambar || 'img/no-image.png';
+            gambar.alt = umkm.produk || 'Produk UMKM';
+
+            const info = document.createElement('div');
+            info.className = 'umkm-product-info';
+
+            const namaProduk = document.createElement('h4');
+            namaProduk.textContent = umkm.produk || 'Produk UMKM';
+
+            const namaUsaha = document.createElement('p');
+            namaUsaha.textContent = umkm.nama || 'Nama UMKM';
+
+            const asalDesa = document.createElement('p');
+            asalDesa.textContent = umkm.desa || '-';
+
+            info.appendChild(namaProduk);
+            info.appendChild(namaUsaha);
+            info.appendChild(asalDesa);
+
+            card.appendChild(gambar);
+            card.appendChild(info);
+
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error('Error UMKM:', error);
+
+        container.innerHTML =
+            '<p>Produk UMKM belum dapat ditampilkan.</p>';
+    }
+}
+
+tampilkanProdukUMKM();
+
+
+// ==========================================
+// MENAMPILKAN DATA DESA DARI DATABASE
+// UNTUK INDEX DAN PROFIL DESA
+// ==========================================
+
+async function muatDaftarDesa() {
+
+    const carousel = document.getElementById("desa-carousel");
+
+    const profilGrid = document.getElementById("profil-village-grid");
+
+    // Hentikan jika kedua container tidak tersedia
+    if (!carousel && !profilGrid) return;
+
+    try {
+
+        // Ambil data desa dari API
+        const response = await fetch("/api/desa");
+
+        if (!response.ok) {
+            throw new Error("Gagal mengambil data desa.");
+        }
+
+        const result = await response.json();
+
+        const daftarDesa = result.data || [];
+
+        // Bersihkan container sebelum menampilkan data
+        if (carousel) carousel.innerHTML = "";
+        if (profilGrid) profilGrid.innerHTML = "";
+
+        if (!daftarDesa.length) {
+            const pesan = document.createElement("p");
+            pesan.textContent = "Data desa belum tersedia.";
+
+            if (carousel) carousel.appendChild(pesan);
+            if (profilGrid) profilGrid.appendChild(pesan.cloneNode(true));
+
+            return;
+        }
+
+        // Buat elemen gambar
+        function buatGambar(desa) {
+
+            if (!desa.gambarHero) {
+                const placeholder = document.createElement("div");
+                placeholder.className = "desa-image-placeholder";
+                placeholder.textContent = "Foto desa belum tersedia";
+
+                return placeholder;
+            }
+
+            const img = document.createElement("img");
+
+            img.src = desa.gambarHero;
+            img.alt = desa.namaDesa;
+            img.loading = "lazy";
+
+            img.onerror = function () {
+                const placeholder = document.createElement("div");
+
+                placeholder.className = "desa-image-placeholder";
+                placeholder.textContent = "Foto desa belum tersedia";
+
+                img.replaceWith(placeholder);
+            };
+
+            return img;
+        }
+
+        // Buat format nama kecamatan
+        function namaKecamatan(desa) {
+
+            const kecamatan = desa.kecamatan || "";
+
+            if (!kecamatan) return "Kecamatan belum diisi";
+
+            return /^kecamatan/i.test(kecamatan)
+                ? kecamatan
+                : `Kecamatan ${kecamatan}`;
+        }
+
+        // Tampilkan card desa
+        daftarDesa.forEach(desa => {
+
+            const linkDetail =
+                `detail-desa.html?desa=${encodeURIComponent(desa.slug)}`;
+
+            // ==================================
+            // CARD INDEX
+            // ==================================
+
+            if (carousel) {
+
+                const card = document.createElement("div");
+                card.className = "desa-card";
+
+                const gambar = buatGambar(desa);
+
+                const nama = document.createElement("h3");
+                nama.textContent = desa.namaDesa;
+
+                const kecamatan = document.createElement("p");
+                kecamatan.textContent = namaKecamatan(desa);
+
+                const link = document.createElement("a");
+                link.href = linkDetail;
+                link.className = "desa-link";
+                link.innerHTML =
+                    'Lihat selengkapnya <i class="fa-solid fa-arrow-right-circle"></i>';
+
+                card.append(
+                    gambar,
+                    nama,
+                    kecamatan,
+                    link
+                );
+
+                carousel.appendChild(card);
+            }
+
+            // ==================================
+            // CARD HALAMAN PROFIL DESA
+            // ==================================
+
+            if (profilGrid) {
+
+                const card = document.createElement("a");
+
+                card.href = linkDetail;
+                card.className = "village-card";
+
+                const gambar = buatGambar(desa);
+
+                const overlay = document.createElement("div");
+                overlay.className = "overlay";
+
+                const nama = document.createElement("h4");
+                nama.textContent = desa.namaDesa.toUpperCase();
+
+                const keterangan = document.createElement("span");
+                keterangan.innerHTML =
+                    'Lihat profil desa <i class="fa-solid fa-arrow-right"></i>';
+
+                overlay.append(nama, keterangan);
+
+                card.append(gambar, overlay);
+
+                profilGrid.appendChild(card);
+            }
+
+        });
+
+    } catch (error) {
+
+        console.error("Gagal memuat daftar desa:", error);
+
+        if (carousel) {
+            carousel.textContent = "Data desa gagal dimuat.";
+        }
+
+        if (profilGrid) {
+            profilGrid.textContent = "Data desa gagal dimuat.";
+        }
+    }
+}
+
+// Jalankan pemuatan data desa
+muatDaftarDesa();

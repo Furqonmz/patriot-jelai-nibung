@@ -671,18 +671,40 @@ app.get("/api/test", (req, res) => {
 
 
 // ==========================================
-// 15. API DAFTAR DESA
+// API DAFTAR DESA + FOTO PROFIL
 // ==========================================
 app.get("/api/desa", async (req, res) => {
     try {
+        // Ambil seluruh identitas desa
         const daftarDesa = await Desa.find()
-            .select("slug namaDesa kecamatan kabupaten provinsi")
+            .select("_id slug namaDesa kecamatan kabupaten provinsi")
             .sort({ namaDesa: 1 })
             .lean();
 
+        // Ambil foto profil dari koleksi DesaProfile
+        const daftarProfil = await DesaProfile.find({
+            desaId: {
+                $in: daftarDesa.map(desa => desa._id)
+            }
+        })
+        .select("desaId gambarHero")
+        .lean();
+
+        // Hubungkan identitas desa dengan foto profilnya
+        const dataDesa = daftarDesa.map(desa => {
+            const profil = daftarProfil.find(
+                item => String(item.desaId) === String(desa._id)
+            );
+
+            return {
+                ...desa,
+                gambarHero: profil?.gambarHero || ""
+            };
+        });
+
         res.json({
             pesan: "Data desa berhasil diambil.",
-            data: daftarDesa
+            data: dataDesa
         });
 
     } catch (error) {
@@ -694,6 +716,7 @@ app.get("/api/desa", async (req, res) => {
         });
     }
 });
+
 
 
 // ==========================================
