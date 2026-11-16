@@ -140,12 +140,12 @@ const ceritaSchema = new mongoose.Schema({
 
     gambar: {
         type: String,
-        required: true
+        default: ""
     },
 
     penulis: {
         type: String,
-        required: true
+        default: "Admin/Tim Ekspedisi"
     },
 
     tanggal: {
@@ -1976,7 +1976,7 @@ app.post(
             const ceritaBaru = new Cerita({
                 judul: req.body.judul,
                 deskripsi: req.body.deskripsi,
-                penulis: req.body.penulis,
+                penulis: req.body.penulis?.trim() || "Admin/Tim Ekspedisi",
                 gambar: imagePath
             });
 

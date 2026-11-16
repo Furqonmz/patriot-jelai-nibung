@@ -48,14 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const map = L.map(mapElement).setView([-2.9912, 110.7077], 12);
 
-    L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-        {
-            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-            subdomains: "abcd",
-            maxZoom: 20
-        }
-    ).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+    }).addTo(map);
 
     const lokasiDesa = [
         {
@@ -504,13 +500,26 @@ document.addEventListener("DOMContentLoaded", function() {
             const method = editMode ? 'PUT' : 'POST';
 
             try {
-                const res = await fetch(url, { method, body: formData });
+                const res = await fetch(url, {
+                    method,
+                    body: formData,
+                    credentials: "same-origin"
+                });
+
+                const hasil = await res.json();
+
                 if (res.ok) {
-                    alert(editMode ? "Cerita berhasil diperbarui!" : "Cerita berhasil ditambahkan!");
+                    alert(editMode
+                        ? "Cerita berhasil diperbarui!"
+                        : "Cerita berhasil ditambahkan!");
+
                     formModal.style.display = "none";
+                    form.reset();
                     loadCerita();
+
                 } else {
-                    alert("Gagal menyimpan data.");
+                    alert(hasil.pesan || "Gagal menyimpan cerita.");
+                    console.error("Gagal menyimpan:", hasil);
                 }
             } catch(err) {
                 alert("Terjadi kesalahan server.");
