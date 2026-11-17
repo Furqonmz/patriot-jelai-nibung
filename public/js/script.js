@@ -2426,5 +2426,11 @@ async function muatDaftarDesa() {
     }
 }
 
-// Jalankan pemuatan data desa
-muatDaftarDesa();
+// Jalankan setelah HTML selesai dimuat
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+        muatDaftarDesa();
+    });
+} else {
+    muatDaftarDesa();
+}
